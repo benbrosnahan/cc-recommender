@@ -1,6 +1,6 @@
 # Student Card Picker
 
-**Live: [cense.vercel.app](https://cense.vercel.app)**
+**Live: [cense-card-recommender.vercel.app](https://cense-card-recommender.vercel.app)**
 
 Five questions, three no-annual-fee card recommendations, each with an estimated first-year
 return in dollars based on the spending the user just described.
