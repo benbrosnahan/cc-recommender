@@ -65,7 +65,7 @@ export function generateWhyBullets(calc: CardCalculation, answers: QuizAnswers):
   // Citi Custom Cash auto-optimization
   if (card.id === 'citi-custom-cash') {
     bullets.push(
-      'Automatically earns 5% on your top spending category each month — no activation or tracking required'
+      'Automatically earns 5% on your top spending category each billing cycle — no activation or tracking required'
     );
   }
 
@@ -151,7 +151,7 @@ export function generateCaveat(calc: CardCalculation, answers: QuizAnswers): str
   }
 
   if (card.id === 'citi-custom-cash') {
-    return '5% only applies to the first $500 in your top category per month ($6,000/year) — additional spending earns 1%';
+    return '5% only applies to the first $500 in your top category per billing cycle ($6,000/year) — additional spending earns 1%';
   }
 
   if (card.id === 'united-gateway') {

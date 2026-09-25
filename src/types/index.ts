@@ -52,6 +52,10 @@ export interface RewardRate {
   category: RewardCategory;
   rate: number;
   isRotating?: boolean;
+  // Max purchases per quarter that earn this rate, shared by all capped rates on the card
+  quarterlyCap?: number;
+  // One of several categories the cardholder picks; only the chosen one earns this rate
+  isChoice?: boolean;
   centsPerMile?: number;
 }
 
@@ -79,7 +83,8 @@ export interface CreditCard {
     | 'Chase'
     | 'Bank of America'
     | 'Citi'
-    | 'American Express';
+    | 'American Express'
+    | 'WebBank';
   tagline: string;
   minCreditTier: CreditTier;
   isStudentCard: boolean;

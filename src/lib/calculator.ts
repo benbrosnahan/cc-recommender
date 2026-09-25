@@ -75,32 +75,54 @@ function allocateSpend(
   return result;
 }
 
-function bestRateForCategory(
-  card: CreditCard,
-  category: SpendingCategory | 'base',
-  userTopCategory: SpendingCategory | null
-): number {
-  if (category === 'base') return card.baseRate;
+// Citi Custom Cash: 5% on up to $500 spent per billing cycle in the top eligible category
+const CUSTOM_CASH_CYCLE_CAP = 500;
 
-  // Citi Custom Cash: auto-applies 5% to top category
+// Rotating categories: assume roughly 2 of 4 quarterly categories match a given spending category
+const ROTATING_MATCH_SHARE = 0.5;
+
+interface AllocationEarnings {
+  earned: number;
+  cappedDollarsUsed: number;
+}
+
+function earningsForAllocation(
+  card: CreditCard,
+  alloc: CategoryAllocation,
+  userTopCategory: SpendingCategory | null,
+  cappedRoomLeft: number,
+  chosenCategory: string | null
+): AllocationEarnings {
+  const { category, annualDollars } = alloc;
+  const atBase = { earned: annualDollars * card.baseRate, cappedDollarsUsed: 0 };
+  if (category === 'base') return atBase;
+
+  // Citi Custom Cash: 5% on the top category up to the per-cycle cap, 1% after
   if (card.id === 'citi-custom-cash') {
-    if (category === userTopCategory) return 0.05;
-    return card.baseRate;
+    if (category !== userTopCategory) return atBase;
+    const bonusDollars = Math.min(annualDollars, CUSTOM_CASH_CYCLE_CAP * 12);
+    return {
+      earned: bonusDollars * 0.05 + (annualDollars - bonusDollars) * card.baseRate,
+      cappedDollarsUsed: 0,
+    };
   }
 
-  // Find matching reward rate
-  const match = card.rewardRates.find((r) => {
-    if (r.category === category) return true;
-    // Map coffee/transit/streaming to dining/base for cards that don't explicitly list them
-    return false;
-  });
+  const match = card.rewardRates.find((r) => r.category === category);
+  if (!match) return atBase;
+  // Choice-category cards (BofA Customized Cash) only pay the elevated rate on the one category picked
+  if (match.isChoice && category !== chosenCategory) return atBase;
 
-  if (!match) return card.baseRate;
+  // Rotating categories only earn the elevated rate in quarters where the category matches
+  const quartersActive = match.isRotating ? 4 * ROTATING_MATCH_SHARE : 4;
+  let bonusDollars = (annualDollars * quartersActive) / 4;
+  if (match.quarterlyCap) {
+    bonusDollars = Math.min(bonusDollars, match.quarterlyCap * quartersActive, cappedRoomLeft);
+  }
 
-  // Rotating categories: conservatively apply elevated rate to 50% of spend
-  if (match.isRotating) return match.rate * 0.5 + card.baseRate * 0.5;
-
-  return match.rate;
+  return {
+    earned: bonusDollars * match.rate + (annualDollars - bonusDollars) * card.baseRate,
+    cappedDollarsUsed: match.quarterlyCap ? bonusDollars : 0,
+  };
 }
 
 function calculateCard(
@@ -118,10 +140,25 @@ function calculateCard(
   let categoryEarnings = 0;
 
   if (eligible) {
+    // Quarterly caps are on combined purchases, so capped categories share one yearly pool
+    const quarterlyCap = card.rewardRates.find((r) => r.quarterlyCap)?.quarterlyCap;
+    let cappedRoomLeft = quarterlyCap ? quarterlyCap * 4 : Infinity;
+    // Assume the cardholder picks the choice category where they spend the most
+    const choiceCats = card.rewardRates.filter((r) => r.isChoice).map((r) => r.category as string);
+    const chosenCategory =
+      allocations
+        .filter((a) => choiceCats.includes(a.category as string))
+        .sort((a, b) => b.annualDollars - a.annualDollars)[0]?.category ?? null;
     for (const alloc of allocations) {
       if (alloc.annualDollars === 0) continue;
-      const rate = bestRateForCategory(card, alloc.category, userTopCategory);
-      const earned = alloc.annualDollars * rate;
+      const { earned, cappedDollarsUsed } = earningsForAllocation(
+        card,
+        alloc,
+        userTopCategory,
+        cappedRoomLeft,
+        chosenCategory as string | null
+      );
+      cappedRoomLeft -= cappedDollarsUsed;
       if (earned > 0 && alloc.category !== 'base') {
         const label = categoryLabel(alloc.category as SpendingCategory);
         breakdown.push({ label: `${label} rewards`, annualAmount: earned });
@@ -129,7 +166,7 @@ function calculateCard(
       categoryEarnings += earned;
     }
     // Add base spend earnings to total but don't show as separate line unless significant
-    // (already included via bestRateForCategory returning baseRate for 'base' allocations)
+    // (already included via earningsForAllocation returning baseRate for 'base' allocations)
   }
 
   // Cashback Match (Discover): double all year-1 earnings

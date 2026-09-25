@@ -98,7 +98,7 @@ export function MethodologySection({ result }: Props) {
                 <div className="space-y-1.5 text-xs text-slate-500 leading-relaxed">
                   <p>
                     <span className="font-semibold text-slate-700">Rotating categories (Discover, Freedom Flex):</span>{' '}
-                    The 5% rate was applied to 50% of applicable category spend — modeling that roughly 2 of 4 quarterly categories match your top categories each year.
+                    The 5% rate was applied to 50% of applicable category spend, modeling that roughly 2 of 4 quarterly categories match your top categories each year. It stops at the $1,500 quarterly maximum in combined bonus purchases; spending beyond that earns 1%.
                   </p>
                   <p>
                     <span className="font-semibold text-slate-700">Cashback Match (Discover):</span>{' '}
@@ -110,7 +110,7 @@ export function MethodologySection({ result }: Props) {
                   </p>
                   <p>
                     <span className="font-semibold text-slate-700">Citi Custom Cash:</span>{' '}
-                    5% automatically applied to your top spending category, capped at $500/month in that category.
+                    5% automatically applied to your top spending category on up to $500 per billing cycle ($6,000/year). Spending beyond that earns 1%.
                   </p>
                   <p>
                     <span className="font-semibold text-slate-700">Foreign transaction fees:</span>{' '}

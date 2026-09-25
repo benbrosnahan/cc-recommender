@@ -12,10 +12,10 @@ export const CARDS: CreditCard[] = [
     foreignTransactionFee: 0,
     baseRate: 0.01,
     rewardRates: [
-      { category: 'dining', rate: 0.05, isRotating: true },
-      { category: 'online_shopping', rate: 0.05, isRotating: true },
-      { category: 'gas', rate: 0.05, isRotating: true },
-      { category: 'groceries', rate: 0.05, isRotating: true },
+      { category: 'dining', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
+      { category: 'online_shopping', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
+      { category: 'gas', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
+      { category: 'groceries', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
     ],
     welcomeBonus: {
       amount: 0,
@@ -45,8 +45,8 @@ export const CARDS: CreditCard[] = [
     foreignTransactionFee: 0,
     baseRate: 0.01,
     rewardRates: [
-      { category: 'gas', rate: 0.02 },
-      { category: 'dining', rate: 0.02 },
+      { category: 'gas', rate: 0.02, quarterlyCap: 1000 },
+      { category: 'dining', rate: 0.02, quarterlyCap: 1000 },
     ],
     welcomeBonus: {
       amount: 0,
@@ -175,9 +175,9 @@ export const CARDS: CreditCard[] = [
     baseRate: 0.01,
     rewardRates: [
       { category: 'dining', rate: 0.03 },
-      { category: 'online_shopping', rate: 0.05, isRotating: true },
-      { category: 'groceries', rate: 0.05, isRotating: true },
-      { category: 'gas', rate: 0.05, isRotating: true },
+      { category: 'online_shopping', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
+      { category: 'groceries', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
+      { category: 'gas', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
     ],
     welcomeBonus: {
       amount: 200,
@@ -220,14 +220,14 @@ export const CARDS: CreditCard[] = [
     id: 'united-gateway',
     name: 'United Gateway℠ Card',
     issuer: 'Chase',
-    tagline: '2x miles on dining & transit — no annual fee, no FTF',
+    tagline: '2x miles on gas & transit — no annual fee, no FTF',
     minCreditTier: 'good',
     isStudentCard: false,
     foreignTransactionFee: 0,
     baseRate: 0.01,
     rewardRates: [
       { category: 'united_purchases', rate: 0.02, centsPerMile: 1 },
-      { category: 'dining', rate: 0.02, centsPerMile: 1 },
+      { category: 'gas', rate: 0.02, centsPerMile: 1 },
       { category: 'transit', rate: 0.02, centsPerMile: 1 },
     ],
     welcomeBonus: {
@@ -241,7 +241,7 @@ export const CARDS: CreditCard[] = [
     airlineCard: true,
     airlinePartner: 'United',
     universeReasoning:
-      'The only no-annual-fee United card. Earns 2x miles on dining and transit — categories highly relevant to students. No foreign transaction fees. A strong 30,000-mile welcome bonus (~$300 in United flights) on a $1,000 spend. Best for students who fly United or live near a United hub.',
+      'The only no-annual-fee United card. Earns 2x miles on United purchases, at gas stations, and on local transit and commuting. No foreign transaction fees. A strong 30,000-mile welcome bonus (~$300 in United flights) on a $1,000 spend. Best for students who fly United or live near a United hub.',
     filterTags: ['travel', 'airline'],
   },
   {
@@ -327,10 +327,10 @@ export const CARDS: CreditCard[] = [
     foreignTransactionFee: 0.03,
     baseRate: 0.01,
     rewardRates: [
-      { category: 'dining', rate: 0.03 },
-      { category: 'online_shopping', rate: 0.03 },
-      { category: 'gas', rate: 0.03 },
-      { category: 'groceries', rate: 0.02 },
+      { category: 'dining', rate: 0.03, isChoice: true, quarterlyCap: 2500 },
+      { category: 'online_shopping', rate: 0.03, isChoice: true, quarterlyCap: 2500 },
+      { category: 'gas', rate: 0.03, isChoice: true, quarterlyCap: 2500 },
+      { category: 'groceries', rate: 0.02, quarterlyCap: 2500 },
     ],
     welcomeBonus: {
       amount: 200,
@@ -421,7 +421,7 @@ export const CARDS: CreditCard[] = [
   {
     id: 'petal-2',
     name: 'Petal® 2 "Cash Back, No Fees" Visa',
-    issuer: 'American Express',
+    issuer: 'WebBank',
     tagline: '1.5% cash back after 12 on-time payments',
     minCreditTier: 'none',
     isStudentCard: false,
