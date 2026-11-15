@@ -1,4 +1,5 @@
 import { CardCalculation, QuizAnswers } from '@/types';
+import { isFlatRate } from '@/lib/utils';
 
 export function generateWhyBullets(calc: CardCalculation, answers: QuizAnswers): string[] {
   const { card, welcomeBonusValue, didQualifyForBonus } = calc;
@@ -6,30 +7,30 @@ export function generateWhyBullets(calc: CardCalculation, answers: QuizAnswers):
 
   // No foreign fee + travel
   if (card.foreignTransactionFee === 0 && answers.travelIntent === 'yes') {
-    bullets.push('No foreign transaction fees — ideal for your study abroad plans');
+    bullets.push('No foreign transaction fee, which matters for your time abroad');
   }
 
   // No foreign fee + maybe travel
   if (card.foreignTransactionFee === 0 && answers.travelIntent === 'maybe') {
-    bullets.push('No foreign transaction fees — covers you if your travel plans change');
+    bullets.push('No foreign transaction fee, so you are covered if you do end up abroad');
   }
 
   // Transferable points + travel priority
   if (card.transferablePoints && answers.priority === 'travel_rewards') {
     if (card.issuer === 'Chase') {
       bullets.push(
-        'Earns Chase Ultimate Rewards — transferable to airline and hotel partners when you upgrade to a Sapphire card'
+        'Earns Chase Ultimate Rewards points, which transfer to airlines and hotels once you add a Sapphire card'
       );
     } else if (card.issuer === 'Capital One') {
       bullets.push(
-        'Earns Capital One miles — flexible and transferable to travel partners including Air Canada, Turkish Airlines, and more'
+        'Earns Capital One miles, which transfer to travel partners including Air Canada and Turkish Airlines'
       );
     }
   }
 
   // Airline card
   if (card.airlineCard && card.airlinePartner) {
-    bullets.push(`Earns ${card.airlinePartner} miles directly — great for building toward a free flight`);
+    bullets.push(`Earns ${card.airlinePartner} miles directly, which add up toward a free flight`);
   }
 
   // No credit needed
@@ -37,7 +38,13 @@ export function generateWhyBullets(calc: CardCalculation, answers: QuizAnswers):
     (answers.creditTier === 'none' || answers.creditTier === 'poor') &&
     card.minCreditTier === 'none'
   ) {
-    bullets.push('Designed for students with no credit history — no score required to apply');
+    if (card.issuer === 'Discover') {
+      bullets.push('Built for students with no credit history. Discover does not require a credit score to apply');
+    } else if (card.id === 'freedom-rise') {
+      bullets.push('Chase lists this card as best for people who are new to credit');
+    } else {
+      bullets.push('A student card, aimed at people building credit for the first time');
+    }
   }
 
   // Strong dining rate
@@ -47,10 +54,14 @@ export function generateWhyBullets(calc: CardCalculation, answers: QuizAnswers):
     diningRate &&
     diningRate.rate >= 0.02
   ) {
-    const pct = diningRate.isRotating
-      ? `up to ${(diningRate.rate * 100).toFixed(0)}%`
-      : `${(diningRate.rate * 100).toFixed(0)}%`;
-    bullets.push(`Earns ${pct} back on dining and delivery — your top spending category`);
+    const n = (diningRate.rate * 100).toFixed(0);
+    const rank =
+      answers.spendingCategories[0] === 'dining' ? 'your biggest category' : 'one of your top categories';
+    if (diningRate.centsPerMile) {
+      bullets.push(`Earns ${n} miles per dollar on dining and delivery, ${rank}`);
+    } else {
+      bullets.push(`Earns ${diningRate.isRotating ? 'up to ' : ''}${n}% back on dining and delivery, ${rank}`);
+    }
   }
 
   // Savor student category match
@@ -59,26 +70,32 @@ export function generateWhyBullets(calc: CardCalculation, answers: QuizAnswers):
     (answers.spendingCategories.includes('streaming') ||
       answers.spendingCategories.includes('groceries'))
   ) {
-    bullets.push('3% back on streaming services and groceries — major student spending categories');
+    bullets.push('3% back on groceries and streaming, two places you said your money goes');
   }
 
   // Citi Custom Cash auto-optimization
   if (card.id === 'citi-custom-cash') {
     bullets.push(
-      'Automatically earns 5% on your top spending category each billing cycle — no activation or tracking required'
+      'Pays 5% on whatever you spend the most on each billing cycle, with nothing to activate or track'
     );
   }
 
   // Cashback Match
   if (card.welcomeBonus?.isCashbackMatch) {
-    bullets.push('Cashback Match doubles all your year-one earnings — no cap, no minimum spend');
+    bullets.push('Cashback Match doubles everything you earn in year one, with no cap and no minimum spend');
   }
 
   // Welcome bonus qualified
   if (didQualifyForBonus && welcomeBonusValue >= 100) {
-    bullets.push(
-      `Includes a $${welcomeBonusValue} welcome bonus — reachable within your normal spending`
-    );
+    const reach = 'you would reach on your normal spending';
+    if (card.welcomeBonus?.isMiles) {
+      const miles = (welcomeBonusValue * 100).toLocaleString();
+      bullets.push(`Comes with a welcome bonus of ${miles} miles, worth about $${welcomeBonusValue}, which ${reach}`);
+    } else if (card.welcomeBonus?.isTravelCredit) {
+      bullets.push(`Comes with a $${welcomeBonusValue} welcome bonus, paid as credit toward travel, which ${reach}`);
+    } else {
+      bullets.push(`Comes with a $${welcomeBonusValue} welcome bonus ${reach}`);
+    }
   }
 
   // Welcome bonus guaranteed (Capital One $50 for $100)
@@ -87,27 +104,25 @@ export function generateWhyBullets(calc: CardCalculation, answers: QuizAnswers):
     welcomeBonusValue === 50 &&
     (card.id === 'savor-student' || card.id === 'quicksilver-student')
   ) {
-    bullets.push('$50 bonus after your first $100 in purchases — essentially guaranteed on day one');
+    bullets.push('$50 bonus after your first $100 in purchases, which is close to guaranteed');
   }
 
   // Simplicity for flat-rate cards
-  if (
-    answers.priority === 'simplicity' &&
-    card.rewardRates.every((r) => !r.isRotating)
-  ) {
-    const pct = (card.baseRate * 100).toFixed(1).replace('.0', '');
-    bullets.push(`Flat ${pct}% on every purchase — no categories to track, ever`);
+  if (answers.priority === 'simplicity' && isFlatRate(card)) {
+    const n = parseFloat((card.baseRate * 100).toFixed(2));
+    const rate = card.welcomeBonus?.isMiles ? `${n} miles per dollar` : `${n}%`;
+    bullets.push(`A flat ${rate} on every purchase, so there are no categories to track`);
   }
 
   // Credit building
   if (answers.priority === 'credit_building' && card.isStudentCard) {
-    bullets.push('Reports to all three credit bureaus monthly — every on-time payment builds your score');
+    bullets.push('Reports to all three credit bureaus every month, so each on-time payment builds your score');
   }
 
   // Chase ecosystem path
   if (card.id === 'freedom-rise') {
     bullets.push(
-      'Your entry point to the Chase ecosystem — upgrade to Freedom Unlimited or Sapphire as your credit grows'
+      'A way into Chase: you can move up to Freedom Unlimited or a Sapphire card as your credit grows'
     );
   }
 
@@ -117,58 +132,67 @@ export function generateWhyBullets(calc: CardCalculation, answers: QuizAnswers):
 export function generateCaveat(calc: CardCalculation, answers: QuizAnswers): string {
   const { card, didQualifyForBonus } = calc;
 
+  // For someone heading abroad, where the card works matters more than anything else about it
+  if (card.issuer === 'Discover' && answers.travelIntent === 'yes') {
+    return 'Discover is accepted in fewer places abroad than Visa or Mastercard. If you will be overseas for long, carry a second card on one of those networks.';
+  }
+
   if (card.id === 'freedom-rise' && card.requiresChaseChecking) {
-    return 'Approval odds improve significantly if you have a Chase checking account with at least $250';
+    return 'Chase says having at least $250 in a Chase checking or savings account raises your chances of approval.';
   }
 
   if (card.foreignTransactionFee > 0 && answers.travelIntent !== 'no') {
-    return 'Charges a 3% fee on international purchases — consider a no-fee alternative if you travel abroad';
+    return 'It charges a 3% fee on purchases made abroad. If you travel, a no-fee card will serve you better.';
   }
 
   if (!didQualifyForBonus && calc.welcomeBonusValue === 0 && card.welcomeBonus && !card.welcomeBonus.isCashbackMatch) {
     const req = card.welcomeBonus.spendRequirement;
-    return `The $${card.welcomeBonus.amount} welcome bonus requires $${req.toLocaleString()} in ${card.welcomeBonus.timeframeMonths} months — your spending may not qualify`;
+    return `The $${card.welcomeBonus.amount} welcome bonus needs $${req.toLocaleString()} of spending in ${card.welcomeBonus.timeframeMonths} months. At your spending you would likely miss it, so it is not counted here.`;
   }
 
   if (card.id === 'discover-cash-back') {
-    return 'The 5% rotating categories require quarterly activation through the Discover app — set a reminder or earnings fall to 1%';
+    return 'You have to switch on the 5% categories in the Discover app every quarter. Miss it and those purchases earn 1%, so set a reminder.';
+  }
+
+  if (card.id === 'savor-student') {
+    return 'The 3% on groceries does not apply at superstores like Walmart and Target. Those purchases earn 1%.';
   }
 
   if (card.id === 'freedom-flex') {
-    return "Rotating 5% categories must be activated each quarter through Chase — worth the extra step, but don't forget";
+    return 'You have to switch on the 5% categories with Chase every quarter. Miss it and those purchases earn 1%.';
   }
 
   if (card.id === 'citi-double-cash') {
-    return 'The full 2% requires on-time payment — carrying a balance forfeits the second 1% and accrues interest';
+    return 'You only get the second 1% when you pay the bill. Carry a balance and you lose it, and pay interest on top.';
   }
 
   if (card.id === 'bofa-customized') {
-    return "Your 3% category must be selected online before using — it defaults to gas if you don't choose";
+    return 'You pick your 3% category online. If you never pick, it stays on gas.';
   }
 
   if (card.id === 'delta-blue') {
-    return 'Delta SkyMiles can be difficult to redeem at peak value — best if you fly Delta regularly from a nearby hub';
+    return 'SkyMiles can be hard to use at good value. This card only makes sense if you fly Delta often.';
   }
 
   if (card.id === 'citi-custom-cash') {
-    return '5% only applies to the first $500 in your top category per billing cycle ($6,000/year) — additional spending earns 1%';
+    return 'The 5% stops after $500 in your top category each billing cycle. Spending past that earns 1%.';
   }
 
   if (card.id === 'united-gateway') {
-    return 'Miles are most valuable when redeemed on United flights — redemption value can vary for partner airlines';
+    return 'The miles are worth the most on United flights and less on partner airlines.';
   }
 
   if (card.minCreditTier === 'excellent') {
-    return 'Typically requires a credit score of 700+ — approval is not guaranteed for everyone';
+    return 'This card usually needs a credit score of 700 or more, and approval is not guaranteed.';
   }
 
   if (card.minCreditTier === 'good') {
-    return 'Typically requires a credit score of 670+ — confirm your score before applying to avoid a hard pull';
+    return 'This card usually needs a credit score of 670 or more. Check your score first, because a declined application still shows on your report.';
   }
 
   if (card.issuer === 'Discover') {
-    return 'Discover is accepted at 99% of US merchants but has less international acceptance than Visa or Mastercard';
+    return 'Discover works almost everywhere in the US but is accepted in fewer places abroad than Visa or Mastercard.';
   }
 
-  return 'Always review the full cardholder agreement before applying — terms and offers may change';
+  return 'Banks change offers without notice. Read the terms on the bank\'s page before you apply.';
 }

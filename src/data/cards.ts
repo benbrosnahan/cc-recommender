@@ -1,12 +1,12 @@
 import { CreditCard } from '@/types';
 
 export const CARDS: CreditCard[] = [
-  // ─── Student-Designated Cards ───────────────────────────────────────────
+  // Student-designated cards
   {
     id: 'discover-cash-back',
     name: 'Discover it® Student Cash Back',
     issuer: 'Discover',
-    tagline: 'Earn 5% on rotating categories — doubled in year one',
+    tagline: '5% in categories that rotate each quarter, doubled in year one',
     minCreditTier: 'none',
     isStudentCard: true,
     foreignTransactionFee: 0,
@@ -23,23 +23,17 @@ export const CARDS: CreditCard[] = [
       timeframeMonths: 12,
       isCashbackMatch: true,
     },
-    perks: [
-      {
-        label: 'Good Grades Reward',
-        annualDollarValue: 20,
-        condition: '3.0+ GPA',
-      },
-    ],
+    perks: [],
     applyUrl: 'https://www.discover.com/credit-cards/student-credit-card/it-card.html',
     universeReasoning:
-      'No credit history required, Cashback Match doubles all year-one earnings, and rotating 5% categories frequently include dining, Amazon, and gas — top student spending areas. One of the strongest starter cards available.',
+      'No credit history required, Cashback Match doubles all year-one earnings, and rotating 5% categories frequently include dining, Amazon, and gas, which is where a lot of student money goes. One of the strongest starter cards available.',
     filterTags: ['student', 'cash_back', 'credit_building'],
   },
   {
     id: 'discover-chrome',
     name: 'Discover it® Student Chrome',
     issuer: 'Discover',
-    tagline: '2% on gas & dining, all doubled in year one',
+    tagline: '2% on gas and dining, doubled in year one',
     minCreditTier: 'none',
     isStudentCard: true,
     foreignTransactionFee: 0,
@@ -54,23 +48,17 @@ export const CARDS: CreditCard[] = [
       timeframeMonths: 12,
       isCashbackMatch: true,
     },
-    perks: [
-      {
-        label: 'Good Grades Reward',
-        annualDollarValue: 20,
-        condition: '3.0+ GPA',
-      },
-    ],
+    perks: [],
     applyUrl: 'https://www.discover.com/credit-cards/student-credit-card/chrome-card.html',
     universeReasoning:
-      'Simpler than the rotating Cash Back version — 2% on gas and restaurants with no activation required. Cashback Match still doubles year-one earnings. Best for students who prefer predictability.',
+      'Simpler than the rotating Cash Back version: 2% on gas and restaurants with no activation required. Cashback Match still doubles year-one earnings. Best for students who prefer predictability.',
     filterTags: ['student', 'cash_back', 'credit_building'],
   },
   {
     id: 'savor-student',
     name: 'Capital One Savor Student Cash Rewards',
     issuer: 'Capital One',
-    tagline: '3% on dining, groceries, entertainment & streaming',
+    tagline: '3% on dining, groceries, entertainment and streaming',
     minCreditTier: 'none',
     isStudentCard: true,
     foreignTransactionFee: 0,
@@ -89,14 +77,14 @@ export const CARDS: CreditCard[] = [
     perks: [],
     applyUrl: 'https://www.capitalone.com/credit-cards/savor-student/',
     universeReasoning:
-      'The highest rewards rates of any student card — 3% on dining, groceries, entertainment, and streaming are exactly what college students spend on. No annual fee, no credit history required, and no foreign transaction fees. The $50 bonus is effectively guaranteed on any purchase.',
+      'The highest everyday rates of any student card: 3% on dining, groceries, entertainment and streaming, which is most of what college students spend on. No annual fee, no credit history required, and no foreign transaction fees. The $50 bonus is effectively guaranteed on any purchase.',
     filterTags: ['student', 'cash_back', 'credit_building'],
   },
   {
     id: 'quicksilver-student',
     name: 'Capital One Quicksilver Student Cash Rewards',
     issuer: 'Capital One',
-    tagline: 'Unlimited 1.5% on everything — no categories needed',
+    tagline: '1.5% on everything, no categories to track',
     minCreditTier: 'none',
     isStudentCard: true,
     foreignTransactionFee: 0,
@@ -112,15 +100,15 @@ export const CARDS: CreditCard[] = [
     perks: [],
     applyUrl: 'https://www.capitalone.com/credit-cards/quicksilver-student/',
     universeReasoning:
-      'Flat 1.5% on every purchase with no foreign transaction fees — the simplest no-credit-needed card for students, especially those studying abroad. The $50 bonus is earned almost immediately.',
+      'Flat 1.5% on every purchase with no foreign transaction fees. The simplest no-credit-needed card for students, especially those studying abroad. The $50 bonus is earned almost immediately.',
     filterTags: ['student', 'cash_back', 'travel', 'credit_building'],
   },
   {
     id: 'freedom-rise',
     name: 'Chase Freedom Rise®',
     issuer: 'Chase',
-    tagline: '1.5% on everything — gateway to the Chase ecosystem',
-    minCreditTier: 'poor',
+    tagline: "1.5% on everything, and a way into Chase's other cards",
+    minCreditTier: 'none',
     isStudentCard: false,
     foreignTransactionFee: 0.03,
     baseRate: 0.015,
@@ -129,6 +117,7 @@ export const CARDS: CreditCard[] = [
       amount: 25,
       spendRequirement: 0,
       timeframeMonths: 3,
+      earnedBy: 'setting up automatic payments in the first 3 months',
     },
     perks: [],
     applyUrl: 'https://creditcards.chase.com/cash-back-credit-cards/freedom/rise',
@@ -139,12 +128,12 @@ export const CARDS: CreditCard[] = [
     filterTags: ['cash_back', 'credit_building'],
   },
 
-  // ─── Good Credit Cards (670+) ────────────────────────────────────────────
+  // Good credit (670+)
   {
     id: 'freedom-unlimited',
     name: 'Chase Freedom Unlimited®',
     issuer: 'Chase',
-    tagline: '1.5% flat + 3% dining — earns transferable Chase points',
+    tagline: '1.5% on everything, 3% on dining, in transferable Chase points',
     minCreditTier: 'good',
     isStudentCard: false,
     foreignTransactionFee: 0.03,
@@ -168,10 +157,10 @@ export const CARDS: CreditCard[] = [
     id: 'freedom-flex',
     name: 'Chase Freedom Flex®',
     issuer: 'Chase',
-    tagline: '5% rotating + 3% dining — maximum earning potential',
+    tagline: '5% in rotating categories, plus 3% on dining',
     minCreditTier: 'good',
     isStudentCard: false,
-    foreignTransactionFee: 0.03,
+    foreignTransactionFee: 0,
     baseRate: 0.01,
     rewardRates: [
       { category: 'dining', rate: 0.03 },
@@ -180,7 +169,7 @@ export const CARDS: CreditCard[] = [
       { category: 'gas', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
     ],
     welcomeBonus: {
-      amount: 200,
+      amount: 250,
       spendRequirement: 500,
       timeframeMonths: 3,
     },
@@ -195,7 +184,7 @@ export const CARDS: CreditCard[] = [
     id: 'ventureone',
     name: 'Capital One VentureOne Rewards',
     issuer: 'Capital One',
-    tagline: '1.25x miles on everything — no annual fee travel card',
+    tagline: '1.25 miles per dollar on everything, with no annual fee',
     minCreditTier: 'good',
     isStudentCard: false,
     foreignTransactionFee: 0,
@@ -213,14 +202,14 @@ export const CARDS: CreditCard[] = [
     applyUrl: 'https://www.capitalone.com/credit-cards/ventureone/',
     transferablePoints: true,
     universeReasoning:
-      'The no-annual-fee version of the popular Venture card. Earns flexible miles redeemable for any travel purchase at 1 cent/mile. No foreign transaction fees makes it excellent for international travel. The 20,000-mile welcome bonus is worth ~$200 in travel — reachable on modest spending.',
+      'The no-annual-fee version of the popular Venture card. Earns flexible miles redeemable for any travel purchase at 1 cent/mile. No foreign transaction fees makes it excellent for international travel. The 20,000-mile welcome bonus is worth about $200 in travel, and reachable on modest spending.',
     filterTags: ['travel'],
   },
   {
     id: 'united-gateway',
     name: 'United Gateway℠ Card',
     issuer: 'Chase',
-    tagline: '2x miles on gas & transit — no annual fee, no FTF',
+    tagline: '2 miles per dollar on gas and transit, no foreign fee',
     minCreditTier: 'good',
     isStudentCard: false,
     foreignTransactionFee: 0,
@@ -231,7 +220,7 @@ export const CARDS: CreditCard[] = [
       { category: 'transit', rate: 0.02, centsPerMile: 1 },
     ],
     welcomeBonus: {
-      amount: 300,
+      amount: 400,
       spendRequirement: 1000,
       timeframeMonths: 3,
       isMiles: true,
@@ -241,14 +230,14 @@ export const CARDS: CreditCard[] = [
     airlineCard: true,
     airlinePartner: 'United',
     universeReasoning:
-      'The only no-annual-fee United card. Earns 2x miles on United purchases, at gas stations, and on local transit and commuting. No foreign transaction fees. A strong 30,000-mile welcome bonus (~$300 in United flights) on a $1,000 spend. Best for students who fly United or live near a United hub.',
+      'The only no-annual-fee United card. Earns 2x miles on United purchases, at gas stations, and on local transit and commuting. No foreign transaction fees. A 40,000-mile welcome bonus (about $400 in United flights) on a $1,000 spend. Best for students who fly United or live near a United hub.',
     filterTags: ['travel', 'airline'],
   },
   {
     id: 'delta-blue',
     name: 'Delta SkyMiles® Blue American Express Card',
     issuer: 'American Express',
-    tagline: '2x miles on dining — no annual fee Delta starter card',
+    tagline: "2 miles per dollar on dining, Delta's no-fee starter card",
     minCreditTier: 'good',
     isStudentCard: false,
     foreignTransactionFee: 0,
@@ -268,16 +257,16 @@ export const CARDS: CreditCard[] = [
     airlineCard: true,
     airlinePartner: 'Delta',
     universeReasoning:
-      "Delta's no-annual-fee card earns 2x miles on dining and Delta purchases with no foreign transaction fees. Best for students loyal to Delta. Note: the 10,000-mile welcome bonus is modest compared to competitors — primarily valuable for building SkyMiles for future redemptions.",
+      "Delta's no-annual-fee card earns 2x miles on dining and Delta purchases with no foreign transaction fees. Best for students loyal to Delta. Note: the 10,000-mile welcome bonus is modest next to competitors, so this is mainly a way to start collecting SkyMiles.",
     filterTags: ['travel', 'airline'],
   },
 
-  // ─── Excellent Credit Cards (700+) ──────────────────────────────────────
+  // Excellent credit (700+)
   {
     id: 'citi-custom-cash',
     name: 'Citi Custom Cash® Card',
     issuer: 'Citi',
-    tagline: '5% automatically on your top category — zero effort',
+    tagline: '5% on whatever you spend the most on, automatically',
     minCreditTier: 'excellent',
     isStudentCard: false,
     foreignTransactionFee: 0.03,
@@ -292,15 +281,18 @@ export const CARDS: CreditCard[] = [
     },
     perks: [],
     applyUrl: 'https://www.citi.com/credit-cards/citi-custom-cash-credit-card',
+    isExcluded: true,
+    universeExclusions:
+      'Citi stopped accepting new applications for this card on May 28, 2026, so it can no longer be recommended.',
     universeReasoning:
-      'Automatically earns 5% on whatever you spend the most on each billing cycle — no activation, no category selection. Eligible categories include restaurants, grocery stores, streaming, gas, and online shopping. Perfect for students whose spending varies month to month. $200 bonus on $1,500 spend over 6 months.',
+      'Automatically earns 5% on whatever you spend the most on each billing cycle, with no activation and no category to pick. Eligible categories include restaurants, grocery stores, streaming, gas, and online shopping. Perfect for students whose spending varies month to month. $200 bonus on $1,500 spend over 6 months.',
     filterTags: ['cash_back'],
   },
   {
     id: 'citi-double-cash',
     name: 'Citi Double Cash® Card',
     issuer: 'Citi',
-    tagline: '2% on everything — buy now, earn more when you pay',
+    tagline: '2% on everything: 1% when you buy, 1% when you pay',
     minCreditTier: 'excellent',
     isStudentCard: false,
     foreignTransactionFee: 0.03,
@@ -314,22 +306,22 @@ export const CARDS: CreditCard[] = [
     perks: [],
     applyUrl: 'https://www.citi.com/credit-cards/citi-double-cash-credit-card',
     universeReasoning:
-      'The gold standard of flat-rate cash back — 2% on everything with no category management. 1% when you buy, 1% when you pay. For students who want a simple forever card, this is the ceiling for flat-rate no-annual-fee cards. Requires good-to-excellent credit.',
+      'The standard for flat-rate cash back: 2% on everything, with no categories to manage. 1% when you buy, 1% when you pay. For students who want a simple forever card, this is the ceiling for flat-rate no-annual-fee cards. Requires good-to-excellent credit.',
     filterTags: ['cash_back'],
   },
   {
     id: 'bofa-customized',
     name: 'BofA Customized Cash Rewards for Students',
     issuer: 'Bank of America',
-    tagline: '3% on your chosen category + 2% on groceries',
+    tagline: '3% on a category you choose, doubled to 6% in year one, and 2% on groceries',
     minCreditTier: 'good',
     isStudentCard: true,
     foreignTransactionFee: 0.03,
     baseRate: 0.01,
     rewardRates: [
-      { category: 'dining', rate: 0.03, isChoice: true, quarterlyCap: 2500 },
-      { category: 'online_shopping', rate: 0.03, isChoice: true, quarterlyCap: 2500 },
-      { category: 'gas', rate: 0.03, isChoice: true, quarterlyCap: 2500 },
+      { category: 'dining', rate: 0.03, isChoice: true, quarterlyCap: 2500, firstYearBonusRate: 0.03 },
+      { category: 'online_shopping', rate: 0.03, isChoice: true, quarterlyCap: 2500, firstYearBonusRate: 0.03 },
+      { category: 'gas', rate: 0.03, isChoice: true, quarterlyCap: 2500, firstYearBonusRate: 0.03 },
       { category: 'groceries', rate: 0.02, quarterlyCap: 2500 },
     ],
     welcomeBonus: {
@@ -340,14 +332,14 @@ export const CARDS: CreditCard[] = [
     perks: [],
     applyUrl: 'https://www.bankofamerica.com/credit-cards/products/student-cash-back-credit-card/',
     universeReasoning:
-      'Strong $200 welcome bonus with a $1,000 spend requirement. You choose your 3% category (dining, online shopping, gas, travel, or drug stores). Solid for students with established credit who bank with BofA. Note: 3% foreign transaction fee limits international usefulness.',
+      'Strong $200 welcome bonus with a $1,000 spend requirement. You choose your 3% category (dining, online shopping, gas, travel, drug stores or home improvement), and it pays an extra 3% in the first year. Solid for students with established credit who bank with BofA. Note: 3% foreign transaction fee limits international usefulness.',
     filterTags: ['student', 'cash_back'],
   },
   {
     id: 'bofa-travel-student',
     name: 'BofA Travel Rewards for Students',
     issuer: 'Bank of America',
-    tagline: 'Earn points for travel — $250 welcome bonus in travel credit',
+    tagline: '1.5 points per dollar toward travel, with a $250 travel credit to start',
     minCreditTier: 'good',
     isStudentCard: true,
     foreignTransactionFee: 0,
@@ -364,11 +356,11 @@ export const CARDS: CreditCard[] = [
     perks: [],
     applyUrl: 'https://www.bankofamerica.com/credit-cards/products/student-rewards-credit-card/',
     universeReasoning:
-      "Best welcome bonus of any student card — 25,000 points worth $250 in travel credits on a $1,000 spend. No foreign transaction fees. Best for students who already have credit history and fly regularly. Points apply as statement credits against travel purchases.",
+      "The best welcome bonus of any student card: 25,000 points worth $250 in travel credits on a $1,000 spend. No foreign transaction fees. Best for students who already have credit history and fly regularly. Points apply as statement credits against travel purchases.",
     filterTags: ['student', 'travel'],
   },
 
-  // ─── Documented-but-excluded cards ──────────────────────────────────────
+  // Researched, then left out of recommendations
   {
     id: 'aa-mileup',
     name: 'American Airlines AAdvantage® MileUp® Card',
@@ -393,16 +385,16 @@ export const CARDS: CreditCard[] = [
     airlinePartner: 'American Airlines',
     isExcluded: true,
     universeReasoning:
-      'Earns 2x AAdvantage miles on groceries — a student-relevant category. 15,000-mile welcome bonus on $500 spend.',
+      'Earns 2x AAdvantage miles on groceries, a category students actually use, and comes with a welcome bonus in miles.',
     universeExclusions:
-      'A 3% foreign transaction fee disqualifies this card for any student who travels internationally. Most airline cards waive this fee — the MileUp does not, which is a meaningful drawback.',
+      'A 3% foreign transaction fee disqualifies this card for any student who travels internationally. Most airline cards waive this fee. The MileUp does not, which is a meaningful drawback.',
     filterTags: ['airline'],
   },
   {
     id: 'bankamericard-student',
     name: 'BankAmericard® Credit Card for Students',
     issuer: 'Bank of America',
-    tagline: '0% APR for 18 months — credit building with no rewards',
+    tagline: 'A long 0% intro APR, for building credit without rewards',
     minCreditTier: 'fair',
     isStudentCard: true,
     foreignTransactionFee: 0.03,
@@ -413,7 +405,7 @@ export const CARDS: CreditCard[] = [
     applyUrl: 'https://www.bankofamerica.com/credit-cards/products/bankamericard-student-credit-card/',
     isExcluded: true,
     universeReasoning:
-      'Offers the longest 0% intro APR period of any student card — 18 billing cycles. Useful for large purchases or balance transfers.',
+      'Offers a long 0% intro APR period, which is useful for a large purchase or a balance transfer.',
     universeExclusions:
       "No rewards program at all. Students would earn $0 in cash back or miles. Since our focus is on maximizing value from spending, and Discover/Capital One student cards both offer no-credit-needed options with actual rewards, this card doesn't surface in our recommendations.",
     filterTags: ['student', 'credit_building'],
@@ -433,7 +425,7 @@ export const CARDS: CreditCard[] = [
     applyUrl: 'https://www.petalcard.com/',
     isExcluded: true,
     universeReasoning:
-      "Uses a 'Cash Score' model that evaluates bank account data instead of a credit score — genuinely accessible with zero credit history.",
+      "Uses a 'Cash Score' model that evaluates bank account data instead of a credit score, so it is genuinely open to people with no credit history.",
     universeExclusions:
       'Earns only 1% in year one, growing to 1.5% after 12 on-time payments. Since Discover and Capital One student cards offer better rates (2–5%) with similar or better accessibility, Petal 2 would rarely surface as a strong recommendation for any student profile.',
     filterTags: ['credit_building'],

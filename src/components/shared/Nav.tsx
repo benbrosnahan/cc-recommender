@@ -3,50 +3,39 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-
-// Matches the shared Cense mark used across the other products: a rounded
-// brand-green square with a white "C".
-const LOGO = (
-  <div className="w-7 h-7 rounded-lg bg-[#275B2D] flex items-center justify-center">
-    <span className="text-white text-xs font-bold">C</span>
-  </div>
-);
+import { ACTIVE_CARDS } from '@/data/cards';
 
 export function Nav() {
   const path = usePathname();
-
-  const links = [
-    { href: '/', label: 'Find My Card' },
-    { href: '/cards', label: 'Cards We Consider' },
-  ];
+  const onCards = path === '/cards';
 
   return (
-    <header className="sticky top-0 z-50 bg-page/95 backdrop-blur border-b border-slate-200">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
-        <a
-          href="https://cense.beehiiv.com"
-          className="flex items-center gap-2 shrink-0 rounded-lg hover:opacity-75 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-[#275B2D] focus-visible:ring-offset-2"
-          aria-label="Cense newsletter home"
+    <header className="mx-auto flex w-full max-w-3xl items-center justify-between gap-3 px-4 pt-5 sm:px-6 sm:pt-7">
+      <Link
+        href="/"
+        className="flex flex-shrink-0 items-baseline gap-1.5 whitespace-nowrap rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-4"
+      >
+        {/* accent-hover, not accent: #C1652E on the page is under 4.5:1. */}
+        <span className="font-display text-lg font-bold text-accent-hover sm:text-xl">Cense</span>
+        <span className="font-display text-lg font-bold text-slate-900 sm:text-xl">Card Picker</span>
+      </Link>
+      <div className="flex flex-shrink-0 items-center gap-1.5">
+        <span className="hidden items-center gap-1.5 whitespace-nowrap rounded-full bg-brand-light px-3 py-1.5 text-xs font-semibold text-slate-800 sm:inline-flex">
+          <svg aria-hidden viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M8 1.8 2.8 4v3.6c0 3 2.1 5.5 5.2 6.6 3.1-1.1 5.2-3.6 5.2-6.6V4L8 1.8Z" />
+          </svg>
+          No affiliate links
+        </span>
+        <Link
+          href={onCards ? '/' : '/cards'}
+          className={cn(
+            'inline-flex min-h-[40px] items-center rounded-full px-3 text-sm font-semibold text-slate-800',
+            'transition-colors hover:bg-slate-100 hover:text-slate-900',
+            'focus:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2'
+          )}
         >
-          {LOGO}
-          <span className="font-bold text-[#275B2D] text-base tracking-tight">Cense</span>
-        </a>
-        <nav className="flex gap-1">
-          {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className={cn(
-                'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
-                path === l.href || (l.href === '/' && (path === '/' || path === '/results'))
-                  ? 'bg-[#EAF3E7] text-[#275B2D]'
-                  : 'text-slate-600 hover:text-[#275B2D] hover:bg-slate-100'
-              )}
-            >
-              {l.label}
-            </Link>
-          ))}
-        </nav>
+          {onCards ? 'Find my card' : `All ${ACTIVE_CARDS.length} cards`}
+        </Link>
       </div>
     </header>
   );

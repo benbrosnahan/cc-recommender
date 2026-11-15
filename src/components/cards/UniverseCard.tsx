@@ -1,106 +1,68 @@
 import { CreditCard } from '@/types';
-
-const ISSUER_COLORS: Record<string, string> = {
-  Discover: 'bg-orange-100 text-orange-800',
-  'Capital One': 'bg-red-100 text-red-800',
-  Chase: 'bg-blue-100 text-blue-800',
-  'Bank of America': 'bg-red-100 text-red-900',
-  Citi: 'bg-sky-100 text-sky-800',
-  'American Express': 'bg-emerald-100 text-emerald-800',
-};
+import { bestEverydayRate, cn, creditNeeded } from '@/lib/utils';
+import { Badge, Card } from '@/components/shared/ui';
 
 interface Props {
   card: CreditCard;
 }
 
-function topRateLine(card: CreditCard): string {
-  if (card.id === 'citi-custom-cash') return '5% on your top category (auto)';
-  if (card.welcomeBonus?.isCashbackMatch) {
-    const r = card.rewardRates[0];
-    const base = r ? `${(r.rate * 100).toFixed(0)}%` : `${(card.baseRate * 100).toFixed(0)}%`;
-    return `${base}+ with Cashback Match`;
-  }
-  const max = card.rewardRates.reduce((m, r) => Math.max(m, r.rate), card.baseRate);
-  if (max === card.baseRate) return `${(max * 100).toFixed(1).replace('.0', '')}% flat on everything`;
-  return `Up to ${(max * 100).toFixed(0)}% on top categories`;
-}
-
 function bonusLine(card: CreditCard): string {
-  if (!card.welcomeBonus) return 'No welcome bonus';
-  if (card.welcomeBonus.isCashbackMatch) return 'Cashback Match — all year-1 earnings doubled';
-  const amt = `$${card.welcomeBonus.amount}`;
-  const req = card.welcomeBonus.spendRequirement > 0
-    ? ` after $${card.welcomeBonus.spendRequirement.toLocaleString()} in ${card.welcomeBonus.timeframeMonths} months`
+  const b = card.welcomeBonus;
+  if (!b) return 'None';
+  if (b.isCashbackMatch) return 'Everything you earn in year one, doubled';
+  const amount = b.isMiles ? `${(b.amount * 100).toLocaleString()} miles` : `$${b.amount}`;
+  const rateBonus = card.rewardRates.some((r) => r.firstYearBonusRate)
+    ? ', plus an extra 3% in your chosen category'
     : '';
-  return `${amt}${req}`;
+  if (b.earnedBy) return `${amount} for ${b.earnedBy}`;
+  if (b.spendRequirement === 0) return amount;
+  return `${amount} after $${b.spendRequirement.toLocaleString()} in ${b.timeframeMonths} months${rateBonus}`;
 }
 
 export function UniverseCard({ card }: Props) {
+  const rows = [
+    ['Best everyday rate', bestEverydayRate(card)],
+    ['First-year extra', bonusLine(card)],
+    ['Fee abroad', card.foreignTransactionFee === 0 ? 'None' : '3% per purchase'],
+    ['Credit score needed', creditNeeded(card)],
+  ];
   return (
-    <div
-      className={`bg-white rounded-2xl border p-5 ${card.isExcluded ? 'border-slate-200 opacity-70' : 'border-slate-200 hover:border-slate-300 hover:shadow-sm'} transition-all`}
-    >
-      <div className="flex items-start justify-between gap-2 mb-3">
-        <span
-          className={`text-xs font-semibold px-2.5 py-1 rounded-full ${ISSUER_COLORS[card.issuer] ?? 'bg-slate-100 text-slate-700'}`}
-        >
-          {card.issuer}
-        </span>
-        <div className="flex gap-1.5 flex-wrap justify-end">
-          {card.isStudentCard && (
-            <span className="text-[10px] font-bold px-2 py-0.5 bg-[#EAF3E7] text-[#275B2D] rounded-full uppercase tracking-wide">
-              Student Card
-            </span>
-          )}
-          {card.airlineCard && (
-            <span className="text-[10px] font-bold px-2 py-0.5 bg-sky-50 text-sky-700 rounded-full uppercase tracking-wide">
-              Airline
-            </span>
-          )}
-          {card.isExcluded && (
-            <span className="text-[10px] font-bold px-2 py-0.5 bg-slate-100 text-slate-500 rounded-full uppercase tracking-wide">
-              Not recommended
-            </span>
-          )}
+    <Card className={cn('flex flex-col p-5', card.isExcluded && 'bg-white/60 shadow-none')}>
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-sm font-semibold text-slate-600">{card.issuer}</span>
+        <div className="flex flex-wrap justify-end gap-1.5">
+          {card.isStudentCard && <Badge>Student card</Badge>}
+          {card.airlineCard && <Badge>Airline</Badge>}
+          {card.isExcluded && <Badge tone="accent">Left out</Badge>}
         </div>
       </div>
 
-      <h3 className="font-bold text-slate-900 text-sm leading-snug mb-0.5">{card.name}</h3>
-      <p className="text-xs text-slate-500 mb-3">{card.tagline}</p>
+      <h3 className="mt-2 font-display text-xl font-bold leading-tight text-slate-900">{card.name}</h3>
+      <p className="mt-1 text-sm leading-snug text-slate-700">{card.tagline}</p>
 
-      <div className="space-y-1.5 mb-3">
-        <div className="flex items-center gap-2 text-xs">
-          <span className="text-slate-400 w-20 shrink-0">Top rate</span>
-          <span className="font-semibold text-slate-700">{topRateLine(card)}</span>
-        </div>
-        <div className="flex items-center gap-2 text-xs">
-          <span className="text-slate-400 w-20 shrink-0">Bonus</span>
-          <span className="font-semibold text-slate-700">{bonusLine(card)}</span>
-        </div>
-        <div className="flex items-center gap-2 text-xs">
-          <span className="text-slate-400 w-20 shrink-0">Foreign fee</span>
-          <span className={`font-semibold ${card.foreignTransactionFee === 0 ? 'text-[#16A34A]' : 'text-amber-700'}`}>
-            {card.foreignTransactionFee === 0 ? 'None' : '3%'}
-          </span>
-        </div>
-        <div className="flex items-center gap-2 text-xs">
-          <span className="text-slate-400 w-20 shrink-0">Annual fee</span>
-          <span className="font-semibold text-[#16A34A]">$0</span>
-        </div>
-      </div>
+      {/* Cards we do not recommend get the reasoning only. Their offer terms
+          are not re-checked, so they are not printed as facts. */}
+      {!card.isExcluded && (
+        <dl className="mt-4 space-y-2 border-t border-line pt-4 text-sm">
+          {rows.map(([k, v]) => (
+            <div key={k} className="flex gap-3">
+              <dt className="w-36 flex-shrink-0 text-slate-600">{k}</dt>
+              <dd className="font-semibold text-slate-900">{v}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
 
-      <div className="border-t border-slate-100 pt-3">
-        <p className="text-xs text-slate-500 leading-relaxed">
-          <span className="font-semibold text-slate-700">Why we consider it: </span>
-          {card.universeReasoning}
+      <p className="mt-4 text-sm leading-relaxed text-slate-700">
+        <span className="font-bold text-slate-900">Why it is here. </span>
+        {card.universeReasoning}
+      </p>
+      {card.universeExclusions && (
+        <p className="mt-3 rounded-2xl bg-accent-light/60 p-3.5 text-sm leading-relaxed text-accent-deep">
+          <span className="font-bold">Why we left it out. </span>
+          {card.universeExclusions}
         </p>
-        {card.universeExclusions && (
-          <p className="text-xs text-amber-700 leading-relaxed mt-2">
-            <span className="font-semibold">Why it&apos;s excluded from recommendations: </span>
-            {card.universeExclusions}
-          </p>
-        )}
-      </div>
-    </div>
+      )}
+    </Card>
   );
 }

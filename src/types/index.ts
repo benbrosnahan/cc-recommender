@@ -56,6 +56,8 @@ export interface RewardRate {
   quarterlyCap?: number;
   // One of several categories the cardholder picks; only the chosen one earns this rate
   isChoice?: boolean;
+  // Extra rate paid on top of `rate` during the first year only
+  firstYearBonusRate?: number;
   centsPerMile?: number;
 }
 
@@ -66,6 +68,8 @@ export interface WelcomeBonus {
   isCashbackMatch?: boolean;
   isTravelCredit?: boolean;
   isMiles?: boolean;
+  // Set when the bonus is earned by doing something other than spending
+  earnedBy?: string;
 }
 
 export interface CardPerk {
@@ -114,6 +118,10 @@ export interface EarningsLine {
 export interface CardCalculation {
   card: CreditCard;
   yearOneValue: number;
+  // What the card keeps paying once the first-year extras are gone
+  everyYearValue: number;
+  // Welcome bonus or Cashback Match: paid once, in year one only
+  firstYearOnlyValue: number;
   earningsBreakdown: EarningsLine[];
   welcomeBonusValue: number;
   perksValue: number;

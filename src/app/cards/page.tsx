@@ -4,16 +4,17 @@ import { useState } from 'react';
 import { ACTIVE_CARDS, EXCLUDED_CARDS } from '@/data/cards';
 import { UniverseCard } from '@/components/cards/UniverseCard';
 import { CreditCard } from '@/types';
+import { cn } from '@/lib/utils';
 
 type FilterTag = 'all' | 'student' | 'travel' | 'cash_back' | 'credit_building' | 'airline';
 
 const FILTERS: { value: FilterTag; label: string }[] = [
-  { value: 'all', label: 'All cards' },
+  { value: 'all', label: 'All' },
   { value: 'student', label: 'Student cards' },
+  { value: 'credit_building', label: 'First card' },
   { value: 'cash_back', label: 'Cash back' },
   { value: 'travel', label: 'Travel' },
   { value: 'airline', label: 'Airline' },
-  { value: 'credit_building', label: 'Credit building' },
 ];
 
 function matches(card: CreditCard, filter: FilterTag): boolean {
@@ -23,76 +24,63 @@ function matches(card: CreditCard, filter: FilterTag): boolean {
 
 export default function CardsPage() {
   const [filter, setFilter] = useState<FilterTag>('all');
-
   const active = ACTIVE_CARDS.filter((c) => matches(c, filter));
-  const excluded = EXCLUDED_CARDS;
-  const showExcluded = filter === 'all';
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">Cards We Consider</h1>
-        <div className="bg-[#EAF3E7] border border-[#275B2D]/20 rounded-xl p-4">
-          <p className="text-sm text-slate-700 leading-relaxed">
-            We evaluated every widely-available student-appropriate credit card with{' '}
-            <strong>no annual fee</strong>. Annual fees were an immediate disqualifier — students
-            building credit shouldn&apos;t pay to build credit. Here&apos;s every card we
-            considered, and why.
-          </p>
-        </div>
+    <div className="mx-auto w-full max-w-3xl px-4 pt-8 sm:px-6 sm:pt-12">
+      <div className="rise">
+        <h1 className="text-balance font-display text-[2.1rem] font-bold leading-[1.06] tracking-tight text-slate-900 sm:text-5xl">
+          Every card we compare, and the ones we rejected.
+        </h1>
+        <p className="mt-3 max-w-xl text-pretty text-base leading-relaxed text-slate-700 sm:text-lg">
+          {ACTIVE_CARDS.length} cards make up the pool your three picks come from. The one rule for
+          getting in: no annual fee. Nobody should pay a fee to build a first credit history.
+        </p>
       </div>
 
-      {/* Filter tabs */}
-      <div className="flex gap-2 flex-wrap mb-6">
+      <div role="group" aria-label="Filter cards" className="mt-6 flex flex-wrap gap-2">
         {FILTERS.map((f) => (
           <button
             key={f.value}
+            type="button"
+            aria-pressed={filter === f.value}
             onClick={() => setFilter(f.value)}
-            className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            className={cn(
+              'min-h-[40px] rounded-full border px-4 text-sm font-semibold transition-colors',
+              'focus:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2',
               filter === f.value
-                ? 'bg-[#275B2D] text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
+                ? 'border-navy bg-navy text-white'
+                : 'border-slate-300 bg-white text-slate-900 hover:border-navy hover:bg-slate-100'
+            )}
           >
             {f.label}
           </button>
         ))}
       </div>
 
-      {/* Active cards */}
-      <div className="mb-10">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-4">
-          {active.length} card{active.length !== 1 ? 's' : ''} in our recommendation pool
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {active.map((card) => (
-            <UniverseCard key={card.id} card={card} />
-          ))}
-          {active.length === 0 && (
-            <p className="col-span-2 text-slate-500 text-sm py-4">
-              No cards match this filter.
-            </p>
-          )}
-        </div>
+      <p aria-live="polite" className="mt-6 text-xs font-semibold uppercase tracking-[0.08em] text-slate-600">
+        {active.length} {active.length === 1 ? 'card' : 'cards'}
+      </p>
+      <div className="mt-3 grid grid-cols-1 gap-4 md:grid-cols-2">
+        {active.map((card) => (
+          <UniverseCard key={card.id} card={card} />
+        ))}
       </div>
 
-      {/* Excluded cards */}
-      {showExcluded && excluded.length > 0 && (
-        <div>
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">
-            Cards we researched but excluded
+      {filter === 'all' && EXCLUDED_CARDS.length > 0 && (
+        <section className="mt-12">
+          <h2 className="font-display text-2xl font-bold leading-tight text-slate-900">
+            Looked at, then left out
           </h2>
-          <p className="text-xs text-slate-500 mb-4">
-            These cards were evaluated but are not surfaced in recommendations. We&apos;re
-            transparent about why.
+          <p className="mt-1.5 max-w-xl text-base leading-relaxed text-slate-700">
+            These have no annual fee either, but they never show up in your picks. Each one says why.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {excluded.map((card) => (
+          <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+            {EXCLUDED_CARDS.map((card) => (
               <UniverseCard key={card.id} card={card} />
             ))}
           </div>
-        </div>
+        </section>
       )}
     </div>
   );

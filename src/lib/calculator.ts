@@ -84,6 +84,8 @@ const ROTATING_MATCH_SHARE = 0.5;
 interface AllocationEarnings {
   earned: number;
   cappedDollarsUsed: number;
+  // Paid in year one only, on top of `earned`
+  firstYearExtra: number;
 }
 
 function earningsForAllocation(
@@ -94,7 +96,7 @@ function earningsForAllocation(
   chosenCategory: string | null
 ): AllocationEarnings {
   const { category, annualDollars } = alloc;
-  const atBase = { earned: annualDollars * card.baseRate, cappedDollarsUsed: 0 };
+  const atBase = { earned: annualDollars * card.baseRate, cappedDollarsUsed: 0, firstYearExtra: 0 };
   if (category === 'base') return atBase;
 
   // Citi Custom Cash: 5% on the top category up to the per-cycle cap, 1% after
@@ -104,6 +106,7 @@ function earningsForAllocation(
     return {
       earned: bonusDollars * 0.05 + (annualDollars - bonusDollars) * card.baseRate,
       cappedDollarsUsed: 0,
+      firstYearExtra: 0,
     };
   }
 
@@ -122,6 +125,7 @@ function earningsForAllocation(
   return {
     earned: bonusDollars * match.rate + (annualDollars - bonusDollars) * card.baseRate,
     cappedDollarsUsed: match.quarterlyCap ? bonusDollars : 0,
+    firstYearExtra: bonusDollars * (match.firstYearBonusRate ?? 0),
   };
 }
 
@@ -138,6 +142,7 @@ function calculateCard(
 
   const breakdown: EarningsLine[] = [];
   let categoryEarnings = 0;
+  let firstYearRateBonus = 0;
 
   if (eligible) {
     // Quarterly caps are on combined purchases, so capped categories share one yearly pool
@@ -151,7 +156,7 @@ function calculateCard(
         .sort((a, b) => b.annualDollars - a.annualDollars)[0]?.category ?? null;
     for (const alloc of allocations) {
       if (alloc.annualDollars === 0) continue;
-      const { earned, cappedDollarsUsed } = earningsForAllocation(
+      const { earned, cappedDollarsUsed, firstYearExtra } = earningsForAllocation(
         card,
         alloc,
         userTopCategory,
@@ -161,12 +166,23 @@ function calculateCard(
       cappedRoomLeft -= cappedDollarsUsed;
       if (earned > 0 && alloc.category !== 'base') {
         const label = categoryLabel(alloc.category as SpendingCategory);
-        breakdown.push({ label: `${label} rewards`, annualAmount: earned });
+        breakdown.push({ label, annualAmount: earned });
+      }
+      if (earned > 0 && alloc.category === 'base') {
+        breakdown.push({ label: 'Everything else', annualAmount: earned });
       }
       categoryEarnings += earned;
+      firstYearRateBonus += firstYearExtra;
     }
-    // Add base spend earnings to total but don't show as separate line unless significant
-    // (already included via earningsForAllocation returning baseRate for 'base' allocations)
+  }
+
+  // A higher rate that only lasts a year is first-year money, like a match
+  if (firstYearRateBonus > 0) {
+    breakdown.push({
+      label: 'Extra 3% on your chosen category (first year only)',
+      annualAmount: firstYearRateBonus,
+      isBonus: true,
+    });
   }
 
   // Cashback Match (Discover): double all year-1 earnings
@@ -174,7 +190,7 @@ function calculateCard(
   if (eligible && card.welcomeBonus?.isCashbackMatch) {
     cashbackMatchBonus = categoryEarnings;
     breakdown.push({
-      label: 'Cashback Match (year-one bonus)',
+      label: 'Cashback Match (first year only)',
       annualAmount: cashbackMatchBonus,
       isBonus: true,
     });
@@ -190,10 +206,12 @@ function calculateCard(
       welcomeBonusValue = card.welcomeBonus.amount;
       didQualifyForBonus = true;
       const bonusLabel = card.welcomeBonus.isTravelCredit
-        ? 'Welcome bonus (travel credit)'
+        ? 'Welcome bonus, as travel credit (first year only)'
         : card.welcomeBonus.isMiles
-        ? 'Welcome bonus (miles, ~1¢/mile)'
-        : 'Welcome bonus';
+        ? 'Welcome bonus, in miles at 1¢ each (first year only)'
+        : card.welcomeBonus.earnedBy
+        ? 'Credit for setting up autopay (first year only)'
+        : 'Welcome bonus (first year only)';
       breakdown.push({ label: bonusLabel, annualAmount: welcomeBonusValue, isBonus: true });
     }
   }
@@ -220,13 +238,22 @@ function calculateCard(
     });
   }
 
+  // Split the headline in two. A match or a welcome bonus is paid once, so a
+  // card that looks best in year one can fall behind from year two on.
+  const everyYearValue = eligible ? categoryEarnings + perksValue - foreignFeeImpact : 0;
+  const firstYearOnlyValue = eligible ? cashbackMatchBonus + welcomeBonusValue + firstYearRateBonus : 0;
+  // Year one is added up in one pass, in a fixed order. Adding the two parts
+  // above instead gives the same dollars but can differ in the last binary
+  // digit, which is enough to reorder two cards that tie exactly.
   const yearOneValue = eligible
-    ? categoryEarnings + cashbackMatchBonus + welcomeBonusValue + perksValue - foreignFeeImpact
+    ? categoryEarnings + cashbackMatchBonus + welcomeBonusValue + perksValue - foreignFeeImpact + firstYearRateBonus
     : 0;
 
   return {
     card,
     yearOneValue,
+    everyYearValue,
+    firstYearOnlyValue,
     earningsBreakdown: breakdown,
     welcomeBonusValue,
     perksValue,
@@ -316,5 +343,14 @@ export function calculateRecommendations(answers: QuizAnswers): RecommendationRe
     quizAnswers: answers,
   };
 }
+
+// A worked example, so a visitor can see a result without taking the quiz.
+export const EXAMPLE_ANSWERS: QuizAnswers = {
+  creditTier: 'none',
+  spendingCategories: ['dining', 'groceries'],
+  spendBucket: '500_1000',
+  travelIntent: 'no',
+  priority: 'maximize_cash',
+};
 
 export { SPEND_MIDPOINTS, categoryLabel };

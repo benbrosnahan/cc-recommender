@@ -1,32 +1,15 @@
 @import "tailwindcss";
 
-:root {
-  --font-sans: var(--font-inter), system-ui, sans-serif;
-  --background: #FFFCEC;
-  --foreground: #275B2D;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-/* ---- Cense brand theme ----
-   Overrides Tailwind's stock neutral ramps so existing slate and gray
-   utility classes render as the warm green-on-cream Cense palette.
-   Semantic colors (red, amber, emerald) are deliberately left untouched. */
+/* ---- Cense design system ----
+   Shared with Loan Desk and Decode so the tools read as one family: cream
+   page, brand green ink, one orange accent, Bricolage Grotesque for headlines
+   and headline figures, Instrument Sans for everything read or compared.
+   The slate and gray ramps are overridden so stock utility classes pick up
+   the warm green-on-cream palette. */
 @theme {
+  --font-sans: var(--font-instrument), system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-instrument), system-ui, sans-serif;
+
   --color-slate-50: #F6F3E1;
   --color-slate-100: #EAF3E7;
   --color-slate-200: #DCE7D8;
@@ -49,9 +32,121 @@ body {
   --color-gray-800: #2F6133;
   --color-gray-900: #275B2D;
 
+  --color-navy: #275B2D;
+  --color-navy-hover: #1E4623;
   --color-brand: #275B2D;
   --color-brand-hover: #1E4623;
   --color-brand-light: #EAF3E7;
+  --color-brand-border: #BFDCB8;
+  /* #C1652E fails 4.5:1 as text on the page. Use accent-hover for type. */
+  --color-accent: #C1652E;
+  --color-accent-hover: #A8531F;
+  --color-accent-deep: #8A4213;
+  --color-accent-light: #F7E4D6;
+  /* Chart marks only. This green and orange pair is the one Loan Desk
+     validated for red-green colorblind separation. Do not brighten it. */
+  --color-chart-green: #26602D;
+  --color-chart-orange: #C1652E;
+  --color-chart-track: #EAF3E7;
   --color-page: #FFFCEC;
   --color-line: #DCE7D8;
+
+  /* The floor. Nothing in the interface is set smaller than 13px. */
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.2rem;
+
+  --shadow-card: 0 1px 0 rgba(39, 91, 45, 0.04), 0 8px 24px -12px rgba(39, 91, 45, 0.18);
+  --shadow-lift: 0 1px 0 rgba(39, 91, 45, 0.05), 0 16px 32px -16px rgba(39, 91, 45, 0.28);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  color: #275b2d;
+  background: #fffcec;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer utilities {
+  /* Money must not jitter between rows. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+  /* Headline figures. Proportional digits, so $1,110 does not look gappy. */
+  .figure {
+    font-family: var(--font-display);
+    font-variant-numeric: proportional-nums;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Entrances are CSS, not JavaScript. A script-driven fade starts content at
+   opacity 0 and relies on animation frames to bring it back, so a tab opened
+   in the background, or a slow phone, can leave the page looking blank. A CSS
+   animation always ends in its final state. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.24s ease-out both;
+}
+@keyframes unfold {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.unfold {
+  animation: unfold 0.2s ease-out both;
+}
+/* The earnings bar draws left to right once, on arrival. */
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.grow {
+  transform-origin: left center;
+  animation: grow 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* First-year money is hatched as well as orange, so the two kinds of dollars
+   are told apart by pattern and not by hue alone. */
+.hatch {
+  background-color: #c1652e;
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(255, 252, 236, 0.5) 0 2px,
+    transparent 2px 7px
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

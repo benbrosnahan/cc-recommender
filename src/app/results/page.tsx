@@ -1,58 +1,66 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { RecommendationResult } from '@/types';
+import { useMemo, useSyncExternalStore } from 'react';
+import Link from 'next/link';
+import { QuizAnswers, RecommendationResult } from '@/types';
+import { calculateRecommendations, EXAMPLE_ANSWERS } from '@/lib/calculator';
 import { ResultsPage } from '@/components/results/ResultsPage';
-import { useState } from 'react';
+import { buttonClass } from '@/components/shared/ui';
+
+const ANSWERS_KEY = 'cc-answers';
+
+type Loaded = { result: RecommendationResult | null; isExample: boolean };
+
+// The answers live in the browser (the address bar or session storage), so
+// they are read as an external store: nothing on the server, the real value
+// on the client, and no state set from inside an effect.
+const EXAMPLE = 'example';
+const subscribe = () => () => {};
+function readSource(): string {
+  // /results?example=1 shows a worked example with no quiz, so the page can
+  // be linked to directly.
+  if (new URLSearchParams(window.location.search).has(EXAMPLE)) return EXAMPLE;
+  return sessionStorage.getItem(ANSWERS_KEY) ?? '';
+}
+
+function load(source: string): Loaded {
+  const isExample = source === EXAMPLE;
+  let answers: QuizAnswers | null = isExample ? EXAMPLE_ANSWERS : null;
+  if (!answers && source) {
+    try {
+      answers = JSON.parse(source) as QuizAnswers;
+    } catch {
+      answers = null;
+    }
+  }
+  return { result: answers ? calculateRecommendations(answers) : null, isExample };
+}
 
 export default function Results() {
-  const [result, setResult] = useState<RecommendationResult | null>(null);
-  const [ready, setReady] = useState(false);
-  const router = useRouter();
-  const didRun = useRef(false);
+  const source = useSyncExternalStore(subscribe, readSource, () => null);
+  const loaded = useMemo(() => (source === null ? null : load(source)), [source]);
 
-  useEffect(() => {
-    if (didRun.current) return;
-    didRun.current = true;
+  if (!loaded) return <div className="min-h-[60vh]" />;
 
-    let parsed: RecommendationResult | null = null;
-    const raw = sessionStorage.getItem('cc-recommendation');
-    if (raw) {
-      try {
-        parsed = JSON.parse(raw) as RecommendationResult;
-      } catch {
-        sessionStorage.removeItem('cc-recommendation');
-      }
-    }
-    setResult(parsed);
-    setReady(true);
-  }, []);
-
-  if (!ready) {
+  if (!loaded.result || loaded.result.top3.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="w-6 h-6 border-2 border-[#275B2D] border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
-
-  if (!result) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] px-4 text-center">
-        <p className="text-xl font-bold text-slate-800 mb-2">No results yet</p>
-        <p className="text-slate-500 text-sm mb-6">
-          Take the quiz first to see your personalized card matches.
+      <div className="mx-auto w-full max-w-3xl px-4 pt-16 sm:px-6">
+        <h1 className="font-display text-3xl font-bold text-slate-900">No answers yet</h1>
+        <p className="mt-3 max-w-xl text-base leading-relaxed text-slate-700">
+          The three cards are worked out from five questions about how you spend. Your answers are
+          not saved between visits, so there is nothing to show until you answer them.
         </p>
-        <button
-          onClick={() => router.push('/')}
-          className="px-6 py-3 bg-[#275B2D] text-white font-semibold rounded-xl hover:bg-[#1E4623] transition-colors text-sm"
-        >
-          Find my card
-        </button>
+        <div className="mt-6 flex flex-wrap gap-2.5">
+          <Link href="/" className={buttonClass('primary')}>
+            Answer the five questions
+          </Link>
+          <a href="/results?example=1" className={buttonClass('secondary')}>
+            See an example result
+          </a>
+        </div>
       </div>
     );
   }
 
-  return <ResultsPage result={result} />;
+  return <ResultsPage result={loaded.result} isExample={loaded.isExample} />;
 }

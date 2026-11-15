@@ -1,8 +1,8 @@
 'use client';
 
 import { useReducer } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { AnimatePresence, motion } from 'framer-motion';
 import { QuizAnswers, CreditTier, SpendingCategory, SpendBucket, TravelIntent, Priority } from '@/types';
 import { QuizShell } from '@/components/quiz/QuizShell';
 import { StepCreditScore } from '@/components/quiz/StepCreditScore';
@@ -10,14 +10,16 @@ import { StepSpending } from '@/components/quiz/StepSpending';
 import { StepMonthlySpend } from '@/components/quiz/StepMonthlySpend';
 import { StepTravel } from '@/components/quiz/StepTravel';
 import { StepPriority } from '@/components/quiz/StepPriority';
-import { calculateRecommendations } from '@/lib/calculator';
+import { Button, Card, Eyebrow, buttonClass } from '@/components/shared/ui';
+import { ACTIVE_CARDS, EXCLUDED_CARDS } from '@/data/cards';
 
 const TOTAL_STEPS = 5;
+const ANSWERS_KEY = 'cc-answers';
 
 interface QuizState {
+  // 0 is the opening screen, 1 to 5 are the questions
   step: number;
   answers: QuizAnswers;
-  direction: 1 | -1;
 }
 
 type QuizAction =
@@ -30,8 +32,7 @@ type QuizAction =
   | { type: 'BACK' };
 
 const initialState: QuizState = {
-  step: 1,
-  direction: 1,
+  step: 0,
   answers: {
     creditTier: null,
     spendingCategories: [],
@@ -54,102 +55,117 @@ function reducer(state: QuizState, action: QuizAction): QuizState {
     case 'SET_PRIORITY':
       return { ...state, answers: { ...state.answers, priority: action.payload } };
     case 'NEXT':
-      return { ...state, step: Math.min(state.step + 1, TOTAL_STEPS), direction: 1 };
+      return { ...state, step: Math.min(state.step + 1, TOTAL_STEPS) };
     case 'BACK':
-      return { ...state, step: Math.max(state.step - 1, 1), direction: -1 };
+      return { ...state, step: Math.max(state.step - 1, 0) };
     default:
       return state;
   }
 }
 
-const variants = {
-  enter: (dir: number) => ({ x: dir > 0 ? 60 : -60, opacity: 0 }),
-  center: { x: 0, opacity: 1 },
-  exit: (dir: number) => ({ x: dir > 0 ? -60 : 60, opacity: 0 }),
-};
+function Opening({ onStart }: { onStart: () => void }) {
+  return (
+    <div className="mx-auto w-full max-w-3xl px-4 pt-10 sm:px-6 sm:pt-16">
+      <div className="rise">
+        <h1 className="text-balance font-display text-[2.3rem] font-bold leading-[1.04] tracking-tight text-slate-900 sm:text-6xl">
+          Your first credit card, in dollars.
+        </h1>
+        <p className="mt-4 max-w-xl text-pretty text-lg leading-relaxed text-slate-700">
+          Card sites talk in points, and most are paid when you apply. Answer five questions and
+          see three no-annual-fee cards, with what each would pay you back in the first year and
+          in every year after it.
+        </p>
+        <div className="mt-6 flex flex-wrap gap-2.5">
+          <Button onClick={onStart}>Find my card</Button>
+          <Link href="/results?example=1" className={buttonClass('secondary')}>
+            See an example result first
+          </Link>
+        </div>
+      </div>
+
+      <div className="rise mt-8 grid gap-3 sm:grid-cols-2" style={{ animationDelay: '0.08s' }}>
+        <Card className="p-5">
+          <Eyebrow>What you will need</Eyebrow>
+          <p className="mt-2 text-base leading-relaxed text-slate-800">
+            A rough idea of what you spend in a month and where it goes. A guess is fine.
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">
+            No Social Security number, no credit check, no email. It takes about a minute.
+          </p>
+        </Card>
+        <Card className="p-5">
+          <Eyebrow>What we left out</Eyebrow>
+          <p className="mt-2 text-base leading-relaxed text-slate-800">
+            Every card with an annual fee. Nobody should pay a fee to build a first credit history.
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">
+            <Link
+              href="/cards"
+              className="font-semibold text-slate-900 underline decoration-brand-border underline-offset-4 hover:decoration-navy"
+            >
+              See all {ACTIVE_CARDS.length} cards we compare
+            </Link>
+            , and the {EXCLUDED_CARDS.length} we looked at and rejected.
+          </p>
+        </Card>
+      </div>
+    </div>
+  );
+}
 
 export default function QuizPage() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const router = useRouter();
 
-  function handleNext() {
-    if (state.step < TOTAL_STEPS) {
-      dispatch({ type: 'NEXT' });
-    }
-  }
-
   function handleFinalStep() {
     if (!state.answers.priority) return;
-    const result = calculateRecommendations(state.answers);
-    sessionStorage.setItem('cc-recommendation', JSON.stringify(result));
+    // Only the answers are kept. The results page works the numbers out fresh,
+    // so a change to the card data never shows a stale result.
+    sessionStorage.setItem(ANSWERS_KEY, JSON.stringify(state.answers));
     router.push('/results');
   }
 
-  return (
-    <div className="relative overflow-hidden">
-      {state.step > 1 && (
-        <div className="max-w-xl mx-auto px-4 pt-4">
-          <button
-            onClick={() => dispatch({ type: 'BACK' })}
-            className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-            Back
-          </button>
-        </div>
-      )}
+  if (state.step === 0) return <Opening onStart={() => dispatch({ type: 'NEXT' })} />;
 
-      <QuizShell step={state.step} total={TOTAL_STEPS}>
-        <AnimatePresence mode="wait" custom={state.direction}>
-          <motion.div
-            key={state.step}
-            custom={state.direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.28, ease: 'easeInOut' }}
-          >
-            {state.step === 1 && (
-              <StepCreditScore
-                value={state.answers.creditTier}
-                onChange={(v) => dispatch({ type: 'SET_CREDIT_TIER', payload: v })}
-                onNext={handleNext}
-              />
-            )}
-            {state.step === 2 && (
-              <StepSpending
-                value={state.answers.spendingCategories}
-                onChange={(v) => dispatch({ type: 'SET_SPENDING', payload: v })}
-                onNext={handleNext}
-              />
-            )}
-            {state.step === 3 && (
-              <StepMonthlySpend
-                value={state.answers.spendBucket}
-                onChange={(v) => dispatch({ type: 'SET_SPEND_BUCKET', payload: v })}
-                onNext={handleNext}
-              />
-            )}
-            {state.step === 4 && (
-              <StepTravel
-                value={state.answers.travelIntent}
-                onChange={(v) => dispatch({ type: 'SET_TRAVEL', payload: v })}
-                onNext={handleNext}
-              />
-            )}
-            {state.step === 5 && (
-              <StepPriority
-                value={state.answers.priority}
-                onChange={(v) => dispatch({ type: 'SET_PRIORITY', payload: v })}
-                onNext={handleFinalStep}
-              />
-            )}
-          </motion.div>
-        </AnimatePresence>
-      </QuizShell>
-    </div>
+  const next = () => dispatch({ type: 'NEXT' });
+
+  return (
+    <QuizShell step={state.step} total={TOTAL_STEPS} onBack={() => dispatch({ type: 'BACK' })}>
+      {state.step === 1 && (
+        <StepCreditScore
+          value={state.answers.creditTier}
+          onChange={(v) => dispatch({ type: 'SET_CREDIT_TIER', payload: v })}
+          onNext={next}
+        />
+      )}
+      {state.step === 2 && (
+        <StepSpending
+          value={state.answers.spendingCategories}
+          onChange={(v) => dispatch({ type: 'SET_SPENDING', payload: v })}
+          onNext={next}
+        />
+      )}
+      {state.step === 3 && (
+        <StepMonthlySpend
+          value={state.answers.spendBucket}
+          onChange={(v) => dispatch({ type: 'SET_SPEND_BUCKET', payload: v })}
+          onNext={next}
+        />
+      )}
+      {state.step === 4 && (
+        <StepTravel
+          value={state.answers.travelIntent}
+          onChange={(v) => dispatch({ type: 'SET_TRAVEL', payload: v })}
+          onNext={next}
+        />
+      )}
+      {state.step === 5 && (
+        <StepPriority
+          value={state.answers.priority}
+          onChange={(v) => dispatch({ type: 'SET_PRIORITY', payload: v })}
+          onNext={handleFinalStep}
+        />
+      )}
+    </QuizShell>
   );
 }

@@ -2,23 +2,12 @@
 
 import { TravelIntent } from '@/types';
 import { SelectionCard } from '@/components/shared/SelectionCard';
+import { StepFrame } from './QuizShell';
 
 const OPTIONS: { value: TravelIntent; label: string; description: string }[] = [
-  {
-    value: 'yes',
-    label: 'Yes — I study abroad or travel internationally',
-    description: "Foreign transaction fees matter to me",
-  },
-  {
-    value: 'maybe',
-    label: "Maybe — it's possible in the future",
-    description: "I'd like to keep my options open",
-  },
-  {
-    value: 'no',
-    label: 'No — all my spending is US-based',
-    description: "I won't be traveling internationally",
-  },
+  { value: 'yes', label: 'Yes', description: 'Study abroad, family overseas, or trips out of the country' },
+  { value: 'maybe', label: 'Maybe', description: 'Nothing planned, but it could happen' },
+  { value: 'no', label: 'No', description: 'All of my spending is in the US' },
 ];
 
 interface Props {
@@ -29,14 +18,14 @@ interface Props {
 
 export function StepTravel({ value, onChange, onNext }: Props) {
   return (
-    <div>
-      <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
-        Do you travel internationally?
-      </h1>
-      <p className="text-slate-500 mb-6 text-sm">
-        Some cards charge a 3% fee on purchases abroad — this affects your real earnings.
-      </p>
-      <div className="flex flex-col gap-2.5 mb-8">
+    <StepFrame
+      title="Will you spend money outside the US?"
+      why="Some cards add a 3% fee to every purchase made abroad, which can wipe out the rewards."
+      action="Continue"
+      canContinue={!!value}
+      onNext={onNext}
+    >
+      <div className="flex flex-col gap-2.5">
         {OPTIONS.map((opt) => (
           <SelectionCard
             key={opt.value}
@@ -47,13 +36,6 @@ export function StepTravel({ value, onChange, onNext }: Props) {
           />
         ))}
       </div>
-      <button
-        onClick={onNext}
-        disabled={!value}
-        className="w-full py-3.5 bg-[#275B2D] text-white font-semibold rounded-xl hover:bg-[#1E4623] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-      >
-        Continue
-      </button>
-    </div>
+    </StepFrame>
   );
 }

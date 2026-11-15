@@ -2,28 +2,13 @@
 
 import { Priority } from '@/types';
 import { SelectionCard } from '@/components/shared/SelectionCard';
+import { StepFrame } from './QuizShell';
 
 const OPTIONS: { value: Priority; label: string; description: string }[] = [
-  {
-    value: 'maximize_cash',
-    label: 'Maximize cash back',
-    description: "I want the highest possible dollar return on my spending",
-  },
-  {
-    value: 'simplicity',
-    label: 'Keep it simple',
-    description: "No category tracking — just a card I can swipe anywhere",
-  },
-  {
-    value: 'credit_building',
-    label: 'Build my credit score',
-    description: "I want a card designed to grow my credit history",
-  },
-  {
-    value: 'travel_rewards',
-    label: 'Travel perks & miles',
-    description: "I want rewards I can use toward flights, hotels, or future trips",
-  },
+  { value: 'maximize_cash', label: 'The most money back', description: 'I will track categories if it pays more' },
+  { value: 'simplicity', label: 'Keeping it simple', description: 'One rate on everything, nothing to remember' },
+  { value: 'credit_building', label: 'Building my credit', description: 'A card made for a first credit history' },
+  { value: 'travel_rewards', label: 'Travel', description: 'Rewards I can put toward flights and trips' },
 ];
 
 interface Props {
@@ -34,14 +19,14 @@ interface Props {
 
 export function StepPriority({ value, onChange, onNext }: Props) {
   return (
-    <div>
-      <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
-        What matters most to you?
-      </h1>
-      <p className="text-slate-500 mb-6 text-sm">
-        When cards are close in value, this tiebreaker shapes your final picks.
-      </p>
-      <div className="flex flex-col gap-2.5 mb-8">
+    <StepFrame
+      title="What matters most to you?"
+      why="When two cards come out close in dollars, this decides which one we put first."
+      action="Show my three cards"
+      canContinue={!!value}
+      onNext={onNext}
+    >
+      <div className="flex flex-col gap-2.5">
         {OPTIONS.map((opt) => (
           <SelectionCard
             key={opt.value}
@@ -52,13 +37,6 @@ export function StepPriority({ value, onChange, onNext }: Props) {
           />
         ))}
       </div>
-      <button
-        onClick={onNext}
-        disabled={!value}
-        className="w-full py-3.5 bg-[#275B2D] text-white font-semibold rounded-xl hover:bg-[#1E4623] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-      >
-        See my cards
-      </button>
-    </div>
+    </StepFrame>
   );
 }
