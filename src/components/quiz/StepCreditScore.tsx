@@ -9,8 +9,8 @@ const OPTIONS: { value: CreditTier; label: string; description?: string }[] = [
   { value: 'poor', label: 'Under 580', description: 'Limited history, or rebuilding' },
   { value: 'fair', label: '580 to 669', description: 'Fair' },
   { value: 'good', label: '670 to 739', description: 'Good' },
-  { value: 'excellent', label: '740 or higher', description: 'Very good' },
-  { value: 'unknown', label: 'I would rather not say', description: 'We will show a broader set of cards' },
+  { value: 'excellent', label: '740 or higher', description: 'Excellent' },
+  { value: 'unknown', label: 'I would rather not say', description: 'We will include cards that need good credit' },
 ];
 
 interface Props {

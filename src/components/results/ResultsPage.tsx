@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { RecommendationResult } from '@/types';
 import { answerSummary, figures, formatDollars, spendBucketMonthlyMidpoint } from '@/lib/utils';
 import { Badge, buttonClass } from '@/components/shared/ui';
+import { TERMS_CHECKED, TERMS_CHECKED_LABEL } from '@/data/cards';
 import { PickCard } from './PickCard';
 import { CompareBars } from './CompareBars';
 import { Methodology } from './Methodology';
@@ -42,6 +43,10 @@ export function ResultsPage({ result, isExample }: Props) {
         <p className="mt-3 max-w-xl text-pretty text-base leading-relaxed text-slate-700 sm:text-lg">
           Ranked by the dollars each would pay you back at about {formatDollars(monthly)} a month
           {adjusted ? ', then adjusted for what you said matters most' : ''}. None has an annual fee.
+        </p>
+        <p className="mt-2 text-sm text-slate-600">
+          Card terms checked on each bank&apos;s page on{' '}
+          <time dateTime={TERMS_CHECKED}>{TERMS_CHECKED_LABEL}</time>.
         </p>
 
         <div className="mt-4 flex flex-wrap items-center gap-1.5">

@@ -1,5 +1,15 @@
-import { CardCalculation, QuizAnswers } from '@/types';
+import { CardCalculation, QuizAnswers, SpendingCategory } from '@/types';
 import { isFlatRate } from '@/lib/utils';
+
+const QUARTER_WORD: Partial<Record<SpendingCategory, string>> = {
+  dining: 'eating out',
+  groceries: 'groceries',
+  streaming: 'streaming',
+  gas: 'gas',
+  online_shopping: 'Amazon',
+};
+
+const COUNT = ['no', 'one', 'two', 'three', 'four'];
 
 export function generateWhyBullets(calc: CardCalculation, answers: QuizAnswers): string[] {
   const { card, welcomeBonusValue, didQualifyForBonus } = calc;
@@ -47,30 +57,41 @@ export function generateWhyBullets(calc: CardCalculation, answers: QuizAnswers):
     }
   }
 
-  // Strong dining rate
-  const diningRate = card.rewardRates.find((r) => r.category === 'dining');
-  if (
-    answers.spendingCategories.includes('dining') &&
-    diningRate &&
-    diningRate.rate >= 0.02
-  ) {
+  // Rotating 5%: say how often the student's own categories came up last year
+  const picked = answers.spendingCategories.map((c) => (c === 'coffee' ? 'dining' : c));
+  if (card.rotating) {
+    const hits = picked
+      .filter((c, i) => picked.indexOf(c) === i && QUARTER_WORD[c])
+      .map((c) => ({ c, n: card.rotating!.quarters.filter((q) => q.includes(c)).length }))
+      .filter((h) => h.n > 0)
+      .sort((a, b) => b.n - a.n);
+    if (hits.length > 0) {
+      const { c, n } = hits[0];
+      bullets.push(
+        `In ${card.rotating.year}, the 5% covered ${QUARTER_WORD[c]} in ${COUNT[n]} of four quarters. You switch it on each quarter`
+      );
+    }
+  }
+
+  // Strong dining rate. Coffee shops count as restaurants to the banks.
+  const diningRate = card.rewardRates.find((r) => r.category === 'dining' && !r.isChoice);
+  const eatsOut = picked.includes('dining');
+  if (eatsOut && diningRate && diningRate.rate >= 0.02) {
     const n = (diningRate.rate * 100).toFixed(0);
-    const rank =
-      answers.spendingCategories[0] === 'dining' ? 'your biggest category' : 'one of your top categories';
+    const rank = picked[0] === 'dining' ? 'your biggest category' : 'one of your top categories';
+    const what = answers.spendingCategories.includes('coffee') ? 'eating out and coffee' : 'eating out';
     if (diningRate.centsPerMile) {
-      bullets.push(`Earns ${n} miles per dollar on dining and delivery, ${rank}`);
+      bullets.push(`Earns ${n} miles per dollar on ${what}, ${rank}`);
     } else {
-      bullets.push(`Earns ${diningRate.isRotating ? 'up to ' : ''}${n}% back on dining and delivery, ${rank}`);
+      bullets.push(`Earns ${n}% back on ${what}${card.rotating ? ' all year' : ''}, ${rank}`);
     }
   }
 
   // Savor student category match
-  if (
-    card.id === 'savor-student' &&
-    (answers.spendingCategories.includes('streaming') ||
-      answers.spendingCategories.includes('groceries'))
-  ) {
-    bullets.push('3% back on groceries and streaming, two places you said your money goes');
+  if (card.id === 'savor-student') {
+    const also = (['groceries', 'streaming'] as const).filter((c) => answers.spendingCategories.includes(c));
+    if (also.length === 2) bullets.push('3% back on groceries and streaming, two places you said your money goes');
+    if (also.length === 1) bullets.push(`3% back on ${also[0]}, where you said your money goes`);
   }
 
   // Citi Custom Cash auto-optimization
@@ -159,7 +180,7 @@ export function generateCaveat(calc: CardCalculation, answers: QuizAnswers): str
   }
 
   if (card.id === 'freedom-flex') {
-    return 'You have to switch on the 5% categories with Chase every quarter. Miss it and those purchases earn 1%.';
+    return 'You have to switch on the 5% categories with Chase every quarter. Miss it and those purchases earn 1%, or 3% on dining.';
   }
 
   if (card.id === 'citi-double-cash') {
@@ -167,7 +188,7 @@ export function generateCaveat(calc: CardCalculation, answers: QuizAnswers): str
   }
 
   if (card.id === 'bofa-customized') {
-    return 'You pick your 3% category online. If you never pick, it stays on gas.';
+    return 'You pick the 3% category yourself, in the app or online, and can change it once a month. The 3% and 2% stop at $2,500 a quarter, combined.';
   }
 
   if (card.id === 'delta-blue') {
@@ -183,11 +204,11 @@ export function generateCaveat(calc: CardCalculation, answers: QuizAnswers): str
   }
 
   if (card.minCreditTier === 'excellent') {
-    return 'This card usually needs a credit score of 700 or more, and approval is not guaranteed.';
+    return 'This card is usually for excellent credit, about 740 or more. Check your score first, because a declined application still shows on your report.';
   }
 
   if (card.minCreditTier === 'good') {
-    return 'This card usually needs a credit score of 670 or more. Check your score first, because a declined application still shows on your report.';
+    return 'This card is usually for good credit, about 670 or more. Check your score first, because a declined application still shows on your report.';
   }
 
   if (card.issuer === 'Discover') {

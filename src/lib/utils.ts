@@ -22,28 +22,6 @@ export function formatDollars(amount: number, decimals = 0): string {
   }).format(amount);
 }
 
-export function creditTierLabel(tier: CreditTier): string {
-  const map: Record<CreditTier, string> = {
-    none: 'No credit history',
-    poor: 'Under 580',
-    fair: '580–669',
-    good: '670–739',
-    excellent: '740+',
-    unknown: 'Undisclosed',
-  };
-  return map[tier];
-}
-
-export function spendBucketLabel(bucket: SpendBucket): string {
-  const map: Record<SpendBucket, string> = {
-    under_500: 'Under $500/mo',
-    '500_1000': '$500–$1,000/mo',
-    '1000_2000': '$1,000–$2,000/mo',
-    over_2000: 'Over $2,000/mo',
-  };
-  return map[bucket];
-}
-
 export function spendBucketMonthlyMidpoint(bucket: SpendBucket): number {
   const map: Record<SpendBucket, number> = {
     under_500: 300,
@@ -91,6 +69,7 @@ function list(words: string[]): string {
 /** The best rate a student would actually see on ordinary purchases. */
 export function bestEverydayRate(card: CreditCard): string {
   if (card.id === 'citi-custom-cash') return '5% on your top category';
+  if (card.rotating) return `${pct(card.rotating.rate)} in rotating categories`;
   const miles = card.welcomeBonus?.isMiles === true;
   const unit = (rate: number) =>
     miles ? `${parseFloat((rate * 100).toFixed(2))} miles per dollar` : pct(rate);
@@ -99,19 +78,22 @@ export function bestEverydayRate(card: CreditCard): string {
   if (max === 0) return 'No rewards';
   if (everyday.length === 0 || max <= card.baseRate) return `${unit(card.baseRate)} on everything`;
   const top = everyday.filter((r) => r.rate === max);
-  if (top.some((r) => r.isRotating)) return `${unit(max)} in rotating categories`;
   if (top.some((r) => r.isChoice)) return `${unit(max)} in a category you pick`;
   const words = top.map((r) => CATEGORY_WORD[r.category]).filter((w): w is string => !!w);
   return `${unit(max)} on ${list(words.slice(0, 3))}`;
 }
 
+/**
+ * Banks do not publish a minimum score, so this is the band the card is
+ * usually approved in, on the same bands the quiz asks about.
+ */
 export function creditNeeded(card: CreditCard): string {
   const map: Record<CreditTier, string> = {
-    none: 'None',
+    none: 'No score needed',
     poor: 'Limited history OK',
-    fair: '580 or higher',
-    good: '670 or higher',
-    excellent: '700 or higher',
+    fair: 'Fair, about 580+',
+    good: 'Good, about 670+',
+    excellent: 'Excellent, about 740+',
     unknown: 'Varies',
   };
   return map[card.minCreditTier];
@@ -139,7 +121,7 @@ export function firstYearExtraName(calc: CardCalculation): string {
 
 /** True when the card pays one rate on ordinary purchases, with no categories. */
 export function isFlatRate(card: CreditCard): boolean {
-  if (card.id === 'citi-custom-cash') return false;
+  if (card.id === 'citi-custom-cash' || card.rotating) return false;
   return card.rewardRates.filter((r) => !NOT_EVERYDAY.includes(r.category)).every((r) => r.rate <= card.baseRate);
 }
 
@@ -158,7 +140,7 @@ export function answerSummary(a: QuizAnswers): string[] {
   if (a.spendBucket) out.push(`About ${formatDollars(spendBucketMonthlyMidpoint(a.spendBucket))} a month`);
   const cats = a.spendingCategories;
   if (cats.includes('even_split') || cats.length === 0) out.push('Spending spread evenly');
-  else out.push(`Mostly ${list(cats.map((c) => CATEGORY_WORD[c] ?? c))}`);
+  else out.push(`Mostly ${list(cats.map((c) => (c === 'dining' ? 'eating out' : CATEGORY_WORD[c] ?? c)))}`);
   if (a.travelIntent === 'yes') out.push('Travels abroad');
   if (a.travelIntent === 'maybe') out.push('Might travel abroad');
   if (a.travelIntent === 'no') out.push('Stays in the US');

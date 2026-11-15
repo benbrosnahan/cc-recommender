@@ -35,7 +35,7 @@ function Facts({ calc }: { calc: CardCalculation }) {
   const rows = [
     ['Annual fee', '$0'],
     ['Fee abroad', card.foreignTransactionFee > 0 ? '3% per purchase' : 'None'],
-    ['Credit score needed', creditNeeded(card)],
+    ['Credit usually needed', creditNeeded(card)],
     ['Best everyday rate', bestEverydayRate(card)],
   ];
   return (

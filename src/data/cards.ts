@@ -1,5 +1,10 @@
 import { CreditCard } from '@/types';
 
+// Every rate, cap, bonus, fee and credit level below was checked against the
+// bank's own page on this date. Change it whenever a card is re-checked.
+export const TERMS_CHECKED = '2026-11-15';
+export const TERMS_CHECKED_LABEL = '15 November 2026';
+
 export const CARDS: CreditCard[] = [
   // Student-designated cards
   {
@@ -11,12 +16,16 @@ export const CARDS: CreditCard[] = [
     isStudentCard: true,
     foreignTransactionFee: 0,
     baseRate: 0.01,
-    rewardRates: [
-      { category: 'dining', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
-      { category: 'online_shopping', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
-      { category: 'gas', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
-      { category: 'groceries', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
-    ],
+    rewardRates: [],
+    // Discover's 2026 calendar. Transit is left out: Q3 "transportation"
+    // excludes taxis and rideshare, and the quiz's transit answer includes both.
+    rotating: {
+      rate: 0.05,
+      quarterlyCap: 1500,
+      year: 2026,
+      quarters: [['groceries', 'streaming'], ['dining'], ['gas'], ['dining']],
+      source: 'https://www.discover.com/credit-cards/cash-back/cashback-calendar.html',
+    },
     welcomeBonus: {
       amount: 0,
       spendRequirement: 0,
@@ -26,7 +35,7 @@ export const CARDS: CreditCard[] = [
     perks: [],
     applyUrl: 'https://www.discover.com/credit-cards/student-credit-card/it-card.html',
     universeReasoning:
-      'No credit history required, Cashback Match doubles all year-one earnings, and rotating 5% categories frequently include dining, Amazon, and gas, which is where a lot of student money goes. One of the strongest starter cards available.',
+      'No credit score needed to apply, and Cashback Match doubles everything you earn in year one. The 5% categories change each quarter: in 2026 they were restaurants twice, and groceries with streaming, and gas, once each. Online shopping did not come up at all.',
     filterTags: ['student', 'cash_back', 'credit_building'],
   },
   {
@@ -51,7 +60,7 @@ export const CARDS: CreditCard[] = [
     perks: [],
     applyUrl: 'https://www.discover.com/credit-cards/student-credit-card/chrome-card.html',
     universeReasoning:
-      'Simpler than the rotating Cash Back version: 2% on gas and restaurants with no activation required. Cashback Match still doubles year-one earnings. Best for students who prefer predictability.',
+      'Simpler than the rotating Cash Back version: 2% on gas and restaurants, on up to $1,000 a quarter, with nothing to switch on. Cashback Match still doubles year-one earnings. Best for students who want it predictable.',
     filterTags: ['student', 'cash_back', 'credit_building'],
   },
   {
@@ -67,7 +76,6 @@ export const CARDS: CreditCard[] = [
       { category: 'dining', rate: 0.03 },
       { category: 'groceries', rate: 0.03 },
       { category: 'streaming', rate: 0.03 },
-      { category: 'capital_one_travel', rate: 0.05 },
     ],
     welcomeBonus: {
       amount: 50,
@@ -77,7 +85,7 @@ export const CARDS: CreditCard[] = [
     perks: [],
     applyUrl: 'https://www.capitalone.com/credit-cards/savor-student/',
     universeReasoning:
-      'The highest everyday rates of any student card: 3% on dining, groceries, entertainment and streaming, which is most of what college students spend on. No annual fee, no credit history required, and no foreign transaction fees. The $50 bonus is effectively guaranteed on any purchase.',
+      '3% on dining, groceries, entertainment and streaming, every month, with nothing to switch on. That is most of what students spend on. No credit score needed to apply, and no foreign transaction fee. The $50 bonus needs $100 of purchases in the first 3 months.',
     filterTags: ['student', 'cash_back', 'credit_building'],
   },
   {
@@ -89,9 +97,7 @@ export const CARDS: CreditCard[] = [
     isStudentCard: true,
     foreignTransactionFee: 0,
     baseRate: 0.015,
-    rewardRates: [
-      { category: 'capital_one_travel', rate: 0.05 },
-    ],
+    rewardRates: [],
     welcomeBonus: {
       amount: 50,
       spendRequirement: 100,
@@ -100,7 +106,7 @@ export const CARDS: CreditCard[] = [
     perks: [],
     applyUrl: 'https://www.capitalone.com/credit-cards/quicksilver-student/',
     universeReasoning:
-      'Flat 1.5% on every purchase with no foreign transaction fees. The simplest no-credit-needed card for students, especially those studying abroad. The $50 bonus is earned almost immediately.',
+      'Flat 1.5% on every purchase and no foreign transaction fee. The simplest no-credit-score card for students, especially anyone studying abroad. The $50 bonus needs $100 of purchases in the first 3 months.',
     filterTags: ['student', 'cash_back', 'travel', 'credit_building'],
   },
   {
@@ -124,7 +130,7 @@ export const CARDS: CreditCard[] = [
     requiresChaseChecking: true,
     transferablePoints: false,
     universeReasoning:
-      "Chase's entry-level credit-building card. Approval odds improve significantly with an existing Chase checking account. Earns Chase cash back that can be upgraded to Ultimate Rewards points on a future Sapphire card.",
+      "Chase's card for people new to credit. Chase says $250 or more in a Chase checking or savings account raises your chances of approval. 1.5% on everything, but a 3% fee on purchases abroad.",
     filterTags: ['cash_back', 'credit_building'],
   },
 
@@ -162,14 +168,18 @@ export const CARDS: CreditCard[] = [
     isStudentCard: false,
     foreignTransactionFee: 0,
     baseRate: 0.01,
-    rewardRates: [
-      { category: 'dining', rate: 0.03 },
-      { category: 'online_shopping', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
-      { category: 'groceries', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
-      { category: 'gas', rate: 0.05, isRotating: true, quarterlyCap: 1500 },
-    ],
+    rewardRates: [{ category: 'dining', rate: 0.03 }],
+    // Chase's 2026 calendar. Online shopping is Amazon (Q2). Transit is left
+    // out: Q3 "public transit" names no rideshare.
+    rotating: {
+      rate: 0.05,
+      quarterlyCap: 1500,
+      year: 2026,
+      quarters: [['dining'], ['online_shopping'], ['gas'], ['groceries', 'dining']],
+      source: 'https://creditcards.chase.com/cash-back-credit-cards/freedom/flex',
+    },
     welcomeBonus: {
-      amount: 250,
+      amount: 200,
       spendRequirement: 500,
       timeframeMonths: 3,
     },
@@ -177,7 +187,7 @@ export const CARDS: CreditCard[] = [
     applyUrl: 'https://creditcards.chase.com/cash-back-credit-cards/freedom/flex',
     transferablePoints: true,
     universeReasoning:
-      'The rotating-category powerhouse in the Chase lineup. 5% on quarterly categories (frequently Amazon, grocery, gas) plus a permanent 3% on dining. Earns transferable Ultimate Rewards points. Best for students willing to track and activate quarterly categories.',
+      '5% on categories that change each quarter, plus 3% on dining all year. In 2026 the 5% went to dining twice, and Amazon, gas and groceries once each. No foreign transaction fee. Best for students willing to switch on the categories every quarter.',
     filterTags: ['cash_back', 'travel'],
   },
   {
@@ -185,7 +195,7 @@ export const CARDS: CreditCard[] = [
     name: 'Capital One VentureOne Rewards',
     issuer: 'Capital One',
     tagline: '1.25 miles per dollar on everything, with no annual fee',
-    minCreditTier: 'good',
+    minCreditTier: 'excellent',
     isStudentCard: false,
     foreignTransactionFee: 0,
     baseRate: 0.0125,
@@ -202,7 +212,7 @@ export const CARDS: CreditCard[] = [
     applyUrl: 'https://www.capitalone.com/credit-cards/ventureone/',
     transferablePoints: true,
     universeReasoning:
-      'The no-annual-fee version of the popular Venture card. Earns flexible miles redeemable for any travel purchase at 1 cent/mile. No foreign transaction fees makes it excellent for international travel. The 20,000-mile welcome bonus is worth about $200 in travel, and reachable on modest spending.',
+      'The no-annual-fee version of the Venture card. Miles cover any travel purchase at 1 cent each, and there is no foreign transaction fee. The 20,000-mile bonus, about $200 in travel, needs $500 of purchases in 3 months. Capital One lists it for excellent credit.',
     filterTags: ['travel'],
   },
   {
@@ -300,8 +310,8 @@ export const CARDS: CreditCard[] = [
     rewardRates: [],
     welcomeBonus: {
       amount: 200,
-      spendRequirement: 1500,
-      timeframeMonths: 6,
+      spendRequirement: 500,
+      timeframeMonths: 3,
     },
     perks: [],
     applyUrl: 'https://www.citi.com/credit-cards/citi-double-cash-credit-card',
@@ -319,9 +329,19 @@ export const CARDS: CreditCard[] = [
     foreignTransactionFee: 0.03,
     baseRate: 0.01,
     rewardRates: [
+      // The choices the bank lists include drug stores and home improvement,
+      // which the quiz does not ask about. Online shopping includes streaming.
       { category: 'dining', rate: 0.03, isChoice: true, quarterlyCap: 2500, firstYearBonusRate: 0.03 },
-      { category: 'online_shopping', rate: 0.03, isChoice: true, quarterlyCap: 2500, firstYearBonusRate: 0.03 },
+      {
+        category: 'online_shopping',
+        covers: ['online_shopping', 'streaming'],
+        rate: 0.03,
+        isChoice: true,
+        quarterlyCap: 2500,
+        firstYearBonusRate: 0.03,
+      },
       { category: 'gas', rate: 0.03, isChoice: true, quarterlyCap: 2500, firstYearBonusRate: 0.03 },
+      { category: 'travel', rate: 0.03, isChoice: true, quarterlyCap: 2500, firstYearBonusRate: 0.03 },
       { category: 'groceries', rate: 0.02, quarterlyCap: 2500 },
     ],
     welcomeBonus: {
@@ -332,7 +352,7 @@ export const CARDS: CreditCard[] = [
     perks: [],
     applyUrl: 'https://www.bankofamerica.com/credit-cards/products/student-cash-back-credit-card/',
     universeReasoning:
-      'Strong $200 welcome bonus with a $1,000 spend requirement. You choose your 3% category (dining, online shopping, gas, travel, drug stores or home improvement), and it pays an extra 3% in the first year. Solid for students with established credit who bank with BofA. Note: 3% foreign transaction fee limits international usefulness.',
+      '$200 bonus after $1,000 of purchases in 90 days. You choose your 3% category (dining, online shopping and streaming, gas, travel, drug stores or home improvement), and it pays 6% in the first year. 2% at grocery stores. The 3% and 2% stop at $2,500 a quarter, combined. A 3% fee abroad makes it a poor travel card.',
     filterTags: ['student', 'cash_back'],
   },
   {
@@ -356,7 +376,7 @@ export const CARDS: CreditCard[] = [
     perks: [],
     applyUrl: 'https://www.bankofamerica.com/credit-cards/products/student-rewards-credit-card/',
     universeReasoning:
-      "The best welcome bonus of any student card: 25,000 points worth $250 in travel credits on a $1,000 spend. No foreign transaction fees. Best for students who already have credit history and fly regularly. Points apply as statement credits against travel purchases.",
+      "The biggest welcome bonus of the student cards here: 25,000 points, a $250 credit toward travel and dining, after $1,000 of purchases in 90 days. No foreign transaction fee. Best for students who already have some credit history and travel.",
     filterTags: ['student', 'travel'],
   },
 
@@ -427,7 +447,7 @@ export const CARDS: CreditCard[] = [
     universeReasoning:
       "Uses a 'Cash Score' model that evaluates bank account data instead of a credit score, so it is genuinely open to people with no credit history.",
     universeExclusions:
-      'Earns only 1% in year one, growing to 1.5% after 12 on-time payments. Since Discover and Capital One student cards offer better rates (2–5%) with similar or better accessibility, Petal 2 would rarely surface as a strong recommendation for any student profile.',
+      'Earns only 1% in year one, growing to 1.5% after 12 on-time payments. Since Discover and Capital One student cards offer better rates (2% to 5%) with similar or better accessibility, Petal 2 would rarely surface as a strong recommendation for any student profile.',
     filterTags: ['credit_building'],
   },
 ];

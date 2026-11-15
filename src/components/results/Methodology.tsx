@@ -2,6 +2,7 @@
 
 import { RecommendationResult } from '@/types';
 import { formatDollars, spendBucketMonthlyMidpoint } from '@/lib/utils';
+import { TERMS_CHECKED_LABEL } from '@/data/cards';
 import { Disclosure } from '@/components/shared/ui';
 
 interface Props {
@@ -42,7 +43,11 @@ export function Methodology({ result }: Props) {
     ],
     [
       'Rotating 5% categories',
-      'Discover and Chase Freedom Flex change their 5% categories every quarter. We assume your categories line up half the time, and stop the 5% at the $1,500 quarterly limit.',
+      "Discover and Chase Freedom Flex pay 5% on up to $1,500 a quarter, on categories that change. We use each bank's 2026 calendar and assume next year looks the same. It may not.",
+    ],
+    [
+      'Coffee and caps',
+      'Coffee shops count as eating out, because banks code them as restaurants. Where a cap covers several categories, it is shared in proportion to what you spend.',
     ],
     [
       'First-year extras',
@@ -58,6 +63,10 @@ export function Methodology({ result }: Props) {
     [
       'What is not counted',
       'Interest. Every number here assumes you pay the full balance each month. If you carry a balance, the interest will be larger than any reward on this page.',
+    ],
+    [
+      'Card terms',
+      `Checked on each bank's own page on ${TERMS_CHECKED_LABEL}. Banks change offers often, so check again before you apply.`,
     ],
   ];
 

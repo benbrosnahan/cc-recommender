@@ -7,6 +7,7 @@ import {
   CardCalculation,
   EarningsLine,
   RecommendationResult,
+  RewardRate,
 } from '@/types';
 import { ACTIVE_CARDS } from '@/data/cards';
 
@@ -75,58 +76,102 @@ function allocateSpend(
   return result;
 }
 
-// Citi Custom Cash: 5% on up to $500 spent per billing cycle in the top eligible category
-const CUSTOM_CASH_CYCLE_CAP = 500;
+// Every issuer here codes coffee shops as restaurants (Discover's terms name
+// cafes), so coffee earns whatever the card pays on dining.
+function earnsAs(category: SpendingCategory | 'base'): SpendingCategory | 'base' {
+  return category === 'coffee' ? 'dining' : category;
+}
 
-// Rotating categories: assume roughly 2 of 4 quarterly categories match a given spending category
-const ROTATING_MATCH_SHARE = 0.5;
+function rateCovers(rate: RewardRate, category: SpendingCategory | 'base'): boolean {
+  if (category === 'base') return false;
+  return (rate.covers ?? [rate.category]).includes(category as never);
+}
 
-interface AllocationEarnings {
-  earned: number;
-  cappedDollarsUsed: number;
-  // Paid in year one only, on top of `earned`
+/**
+ * Takes up to `cap` dollars from the listed allocations' remaining spend, pro
+ * rata, since spending in the categories under one cap is interleaved through
+ * the quarter. Returns the dollars taken from each allocation.
+ */
+function takeProRata(remaining: number[], indexes: number[], cap: number): Map<number, number> {
+  const taken = new Map<number, number>();
+  const eligible = indexes.reduce((sum, i) => sum + remaining[i], 0);
+  if (eligible <= 0) return taken;
+  const scale = Math.min(1, cap / eligible);
+  for (const i of indexes) {
+    const t = remaining[i] * scale;
+    if (t > 0) {
+      taken.set(i, t);
+      remaining[i] -= t;
+    }
+  }
+  return taken;
+}
+
+interface CardEarnings {
+  // Paid every year, per allocation, in the allocations' order
+  perAllocation: number[];
+  // Paid in year one only, on top: a first-year rate boost
   firstYearExtra: number;
 }
 
-function earningsForAllocation(
-  card: CreditCard,
-  alloc: CategoryAllocation,
-  userTopCategory: SpendingCategory | null,
-  cappedRoomLeft: number,
-  chosenCategory: string | null
-): AllocationEarnings {
-  const { category, annualDollars } = alloc;
-  const atBase = { earned: annualDollars * card.baseRate, cappedDollarsUsed: 0, firstYearExtra: 0 };
-  if (category === 'base') return atBase;
+/**
+ * A year of rewards, one quarter at a time, with spending spread evenly across
+ * the quarters. Order of tiers in a quarter: the rotating 5% up to its cap,
+ * then capped rates up to the card's combined cap, then uncapped rates, then
+ * the base rate on whatever is left.
+ */
+function earningsForCard(card: CreditCard, allocations: CategoryAllocation[]): CardEarnings {
+  const perAllocation = allocations.map(() => 0);
+  let firstYearExtra = 0;
+  const cats = allocations.map((a) => earnsAs(a.category));
+  const every = allocations.map((_, i) => i);
 
-  // Citi Custom Cash: 5% on the top category up to the per-cycle cap, 1% after
-  if (card.id === 'citi-custom-cash') {
-    if (category !== userTopCategory) return atBase;
-    const bonusDollars = Math.min(annualDollars, CUSTOM_CASH_CYCLE_CAP * 12);
-    return {
-      earned: bonusDollars * 0.05 + (annualDollars - bonusDollars) * card.baseRate,
-      cappedDollarsUsed: 0,
-      firstYearExtra: 0,
-    };
+  // Choice cards (BofA Customized Cash): assume the cardholder picks the
+  // option that covers the most of their spending. Ties go to the first listed.
+  const choices = card.rewardRates.filter((r) => r.isChoice);
+  let chosen: RewardRate | null = null;
+  let chosenDollars = -1;
+  for (const r of choices) {
+    const dollars = allocations.reduce((sum, a, i) => sum + (rateCovers(r, cats[i]) ? a.annualDollars : 0), 0);
+    if (dollars > chosenDollars) {
+      chosen = r;
+      chosenDollars = dollars;
+    }
   }
+  const rateFor = (i: number): RewardRate | undefined =>
+    card.rewardRates.find((r) => rateCovers(r, cats[i]) && (!r.isChoice || r === chosen));
 
-  const match = card.rewardRates.find((r) => r.category === category);
-  if (!match) return atBase;
-  // Choice-category cards (BofA Customized Cash) only pay the elevated rate on the one category picked
-  if (match.isChoice && category !== chosenCategory) return atBase;
+  for (let q = 0; q < 4; q++) {
+    const remaining = allocations.map((a) => a.annualDollars / 4);
 
-  // Rotating categories only earn the elevated rate in quarters where the category matches
-  const quartersActive = match.isRotating ? 4 * ROTATING_MATCH_SHARE : 4;
-  let bonusDollars = (annualDollars * quartersActive) / 4;
-  if (match.quarterlyCap) {
-    bonusDollars = Math.min(bonusDollars, match.quarterlyCap * quartersActive, cappedRoomLeft);
+    if (card.rotating) {
+      const active = card.rotating.quarters[q];
+      const idx = every.filter((i) => cats[i] !== 'base' && active.includes(cats[i] as SpendingCategory));
+      for (const [i, t] of takeProRata(remaining, idx, card.rotating.quarterlyCap)) {
+        perAllocation[i] += t * card.rotating.rate;
+      }
+    }
+
+    const capped = every.filter((i) => rateFor(i)?.quarterlyCap);
+    if (capped.length > 0) {
+      const cap = rateFor(capped[0])!.quarterlyCap!;
+      for (const [i, t] of takeProRata(remaining, capped, cap)) {
+        const r = rateFor(i)!;
+        perAllocation[i] += t * r.rate;
+        firstYearExtra += t * (r.firstYearBonusRate ?? 0);
+      }
+    }
+
+    for (let i = 0; i < allocations.length; i++) {
+      const r = rateFor(i);
+      if (r && !r.quarterlyCap) {
+        perAllocation[i] += remaining[i] * r.rate;
+        remaining[i] = 0;
+      }
+      perAllocation[i] += remaining[i] * card.baseRate;
+    }
   }
-
-  return {
-    earned: bonusDollars * match.rate + (annualDollars - bonusDollars) * card.baseRate,
-    cappedDollarsUsed: match.quarterlyCap ? bonusDollars : 0,
-    firstYearExtra: bonusDollars * (match.firstYearBonusRate ?? 0),
-  };
+  return { perAllocation, firstYearExtra };
 }
 
 function calculateCard(
@@ -134,8 +179,7 @@ function calculateCard(
   answers: QuizAnswers,
   annualSpend: number,
   monthlySpend: number,
-  allocations: CategoryAllocation[],
-  userTopCategory: SpendingCategory | null
+  allocations: CategoryAllocation[]
 ): CardCalculation {
   const userTier = answers.creditTier ?? 'none';
   const eligible = isEligible(card, userTier);
@@ -145,35 +189,15 @@ function calculateCard(
   let firstYearRateBonus = 0;
 
   if (eligible) {
-    // Quarterly caps are on combined purchases, so capped categories share one yearly pool
-    const quarterlyCap = card.rewardRates.find((r) => r.quarterlyCap)?.quarterlyCap;
-    let cappedRoomLeft = quarterlyCap ? quarterlyCap * 4 : Infinity;
-    // Assume the cardholder picks the choice category where they spend the most
-    const choiceCats = card.rewardRates.filter((r) => r.isChoice).map((r) => r.category as string);
-    const chosenCategory =
-      allocations
-        .filter((a) => choiceCats.includes(a.category as string))
-        .sort((a, b) => b.annualDollars - a.annualDollars)[0]?.category ?? null;
-    for (const alloc of allocations) {
-      if (alloc.annualDollars === 0) continue;
-      const { earned, cappedDollarsUsed, firstYearExtra } = earningsForAllocation(
-        card,
-        alloc,
-        userTopCategory,
-        cappedRoomLeft,
-        chosenCategory as string | null
-      );
-      cappedRoomLeft -= cappedDollarsUsed;
-      if (earned > 0 && alloc.category !== 'base') {
-        const label = categoryLabel(alloc.category as SpendingCategory);
-        breakdown.push({ label, annualAmount: earned });
-      }
-      if (earned > 0 && alloc.category === 'base') {
-        breakdown.push({ label: 'Everything else', annualAmount: earned });
-      }
+    const { perAllocation, firstYearExtra } = earningsForCard(card, allocations);
+    allocations.forEach((alloc, i) => {
+      const earned = perAllocation[i];
+      if (earned <= 0) return;
+      const label = alloc.category === 'base' ? 'Everything else' : categoryLabel(alloc.category);
+      breakdown.push({ label, annualAmount: earned });
       categoryEarnings += earned;
-      firstYearRateBonus += firstYearExtra;
-    }
+    });
+    firstYearRateBonus = firstYearExtra;
   }
 
   // A higher rate that only lasts a year is first-year money, like a match
@@ -296,9 +320,9 @@ function priorityBoost(
     return 0;
   }
   if (priority === 'simplicity') {
-    const isFlat = card.rewardRates.every((r) => !r.isRotating) && card.rewardRates.length <= 1;
+    const isFlat = !card.rotating && card.rewardRates.length <= 1;
     if (isFlat && withinRange) return 80;
-    if (card.rewardRates.some((r) => r.isRotating)) return -50;
+    if (card.rotating) return -50;
     return 0;
   }
   if (priority === 'credit_building') {
@@ -316,10 +340,9 @@ export function calculateRecommendations(answers: QuizAnswers): RecommendationRe
   const categories = answers.spendingCategories;
 
   const allocations = allocateSpend(categories, annualSpend);
-  const userTopCategory = categories.includes('even_split') ? null : (categories[0] ?? null);
 
   const allCalculations = ACTIVE_CARDS.map((card) =>
-    calculateCard(card, answers, annualSpend, monthlySpend, allocations, userTopCategory)
+    calculateCard(card, answers, annualSpend, monthlySpend, allocations)
   );
 
   const eligible = allCalculations.filter((c) => c.isEligible);

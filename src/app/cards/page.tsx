@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ACTIVE_CARDS, EXCLUDED_CARDS } from '@/data/cards';
+import { ACTIVE_CARDS, EXCLUDED_CARDS, TERMS_CHECKED, TERMS_CHECKED_LABEL } from '@/data/cards';
 import { UniverseCard } from '@/components/cards/UniverseCard';
 import { CreditCard } from '@/types';
 import { cn } from '@/lib/utils';
@@ -35,6 +35,9 @@ export default function CardsPage() {
         <p className="mt-3 max-w-xl text-pretty text-base leading-relaxed text-slate-700 sm:text-lg">
           {ACTIVE_CARDS.length} cards make up the pool your three picks come from. The one rule for
           getting in: no annual fee. Nobody should pay a fee to build a first credit history.
+        </p>
+        <p className="mt-2 text-sm text-slate-600">
+          Terms checked on each bank&apos;s page on <time dateTime={TERMS_CHECKED}>{TERMS_CHECKED_LABEL}</time>.
         </p>
       </div>
 

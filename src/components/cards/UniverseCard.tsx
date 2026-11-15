@@ -24,7 +24,7 @@ export function UniverseCard({ card }: Props) {
     ['Best everyday rate', bestEverydayRate(card)],
     ['First-year extra', bonusLine(card)],
     ['Fee abroad', card.foreignTransactionFee === 0 ? 'None' : '3% per purchase'],
-    ['Credit score needed', creditNeeded(card)],
+    ['Credit usually needed', creditNeeded(card)],
   ];
   return (
     <Card className={cn('flex flex-col p-5', card.isExcluded && 'bg-white/60 shadow-none')}>

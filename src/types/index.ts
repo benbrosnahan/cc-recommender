@@ -51,7 +51,8 @@ export type RewardCategory =
 export interface RewardRate {
   category: RewardCategory;
   rate: number;
-  isRotating?: boolean;
+  // Quiz categories this rate also pays on, when the bank's category is wider than its name
+  covers?: SpendingCategory[];
   // Max purchases per quarter that earn this rate, shared by all capped rates on the card
   quarterlyCap?: number;
   // One of several categories the cardholder picks; only the chosen one earns this rate
@@ -59,6 +60,18 @@ export interface RewardRate {
   // Extra rate paid on top of `rate` during the first year only
   firstYearBonusRate?: number;
   centsPerMile?: number;
+}
+
+/** A 5% calendar that changes each quarter, as the bank published it. */
+export interface RotatingCalendar {
+  rate: number;
+  // Combined purchases per quarter that earn the rotating rate
+  quarterlyCap: number;
+  // The calendar year these quarters come from
+  year: number;
+  // Four quarters, January to March first, each listing the quiz categories that earned the rate
+  quarters: [SpendingCategory[], SpendingCategory[], SpendingCategory[], SpendingCategory[]];
+  source: string;
 }
 
 export interface WelcomeBonus {
@@ -94,6 +107,7 @@ export interface CreditCard {
   isStudentCard: boolean;
   foreignTransactionFee: number;
   rewardRates: RewardRate[];
+  rotating?: RotatingCalendar;
   baseRate: number;
   welcomeBonus: WelcomeBonus | null;
   perks: CardPerk[];
