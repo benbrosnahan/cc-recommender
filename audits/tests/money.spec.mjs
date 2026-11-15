@@ -144,3 +144,58 @@ test.describe('card terms on the page', () => {
     await expect(page.getByText(/Terms checked on each bank.s page on 15 November 2026/)).toBeVisible();
   });
 });
+
+// MONEY-11: Ben kept the travel priority's lift for Chase points (2026-11-15), on the condition that the page says
+// a Freedom card cannot send points to airlines or hotels by itself. Chase's Freedom rewards agreement only lets
+// points move to another Chase card you hold; its Sapphire Preferred page offers partner transfers, at a $95 fee.
+test.describe('travel priority and Chase points', () => {
+  const travel = { creditTier: 'good', spendingCategories: ['dining', 'travel'], spendBucket: '1000_2000', travelIntent: 'yes', priority: 'travel_rewards' };
+  const sapphire = /Moving them to airlines and hotels needs a Sapphire card later on, which has an annual fee \(\$95 for Sapphire Preferred\)/;
+
+  test('MONEY-11 a Chase pick under the travel priority carries the Sapphire note', async ({ page }) => {
+    await openResults(page, travel);
+    const names = (await readPicks(page)).map(s => s.name);
+    expect(names).toContain('Chase Freedom Flex');
+    await expect(page.getByText(sapphire).first()).toBeVisible();
+  });
+
+  test('MONEY-11 the method explains the lift and the Sapphire step only for the travel priority', async ({ page }) => {
+    await openResults(page, travel);
+    await page.getByRole('button', { name: 'How these numbers are worked out' }).click();
+    const method = page.locator('dl').last();
+    await expect(method).toContainText('Your travel priority');
+    await expect(method).toContainText('changes the order only, not the dollars shown');
+    await expect(method).toContainText(sapphire);
+
+    const other = await page.context().newPage();
+    await openResults(other, { ...travel, priority: 'maximize_cash' });
+    await other.getByRole('button', { name: 'How these numbers are worked out' }).click();
+    await expect(other.locator('dl').last()).not.toContainText('Your travel priority');
+    await expect(other.getByText(sapphire)).toHaveCount(0);
+    await other.close();
+  });
+
+  test('MONEY-11 the cards page no longer says Freedom points simply transfer to Sapphire', async ({ page }) => {
+    await page.goto('/cards');
+    for (const name of ['Chase Freedom Flex®', 'Chase Freedom Unlimited®']) {
+      const card = page.locator('div', { has: page.getByRole('heading', { name }) }).last();
+      await expect(card).toContainText('needs a Sapphire card later on, which has an annual fee');
+      await expect(card).not.toContainText('Points transfer to Chase Sapphire');
+    }
+  });
+});
+
+// MONEY-18: Bank of America's pages refuse automated browsers. Ben confirmed both fees by hand in a normal browser.
+test('MONEY-18 both Bank of America student cards carry the 3% foreign fee Ben confirmed', async ({ page }) => {
+  await page.goto('/cards');
+  const card = page.locator('div', { has: page.getByRole('heading', { name: 'BofA Customized Cash Rewards for Students' }) }).last();
+  await expect(card).toContainText(/Fee abroad\s*3% per purchase/);
+  // The BankAmericard is left out, so the page prints no terms for it; check the data file it is built from.
+  const fs = await import('node:fs');
+  const src = fs.readFileSync(new URL('../../src/data/cards.ts', import.meta.url), 'utf8');
+  for (const id of ['bofa-customized', 'bankamericard-student']) {
+    const block = src.slice(src.indexOf(`id: '${id}'`), src.indexOf('filterTags', src.indexOf(`id: '${id}'`)));
+    expect(block, id).toMatch(/foreignTransactionFee: 0\.03,/);
+    expect(block, id).toContain("foreignTransactionFeeSource: 'confirmed on bankofamerica.com by Ben, 2026-11-15'");
+  }
+});

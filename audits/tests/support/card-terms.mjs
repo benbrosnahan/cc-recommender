@@ -118,7 +118,8 @@ export const CARDS = {
   'bofa-customized': {
     name: 'BofA Customized Cash Rewards for Students',
     url: 'https://www.bankofamerica.com/credit-cards/products/student-cash-back-credit-card/',
-    // The product page does not state a foreign fee; third-party reviews list 3%. Unverified at the issuer.
+    // 3% foreign transaction fee: confirmed on bankofamerica.com by Ben, 2026-11-15 (MONEY-18). The bank's pages
+    // refuse automated browsers, so this one figure was checked by hand in a normal browser.
     tier: 'good', base: 0.01, fx: 0.03, cap: 2500,
     choice: [
       { option: 'dining', covers: ['dining', 'coffee'] },

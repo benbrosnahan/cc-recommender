@@ -327,6 +327,7 @@ export const CARDS: CreditCard[] = [
     minCreditTier: 'good',
     isStudentCard: true,
     foreignTransactionFee: 0.03,
+    foreignTransactionFeeSource: 'confirmed on bankofamerica.com by Ben, 2026-11-15',
     baseRate: 0.01,
     rewardRates: [
       // The choices the bank lists include drug stores and home improvement,
@@ -418,6 +419,7 @@ export const CARDS: CreditCard[] = [
     minCreditTier: 'fair',
     isStudentCard: true,
     foreignTransactionFee: 0.03,
+    foreignTransactionFeeSource: 'confirmed on bankofamerica.com by Ben, 2026-11-15',
     baseRate: 0,
     rewardRates: [],
     welcomeBonus: null,

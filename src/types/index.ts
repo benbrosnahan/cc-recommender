@@ -106,6 +106,9 @@ export interface CreditCard {
   minCreditTier: CreditTier;
   isStudentCard: boolean;
   foreignTransactionFee: number;
+  // Where the foreign fee was confirmed, when the issuer's page could not be
+  // read by the audit's automated browser
+  foreignTransactionFeeSource?: string;
   rewardRates: RewardRate[];
   rotating?: RotatingCalendar;
   baseRate: number;
