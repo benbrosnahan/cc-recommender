@@ -75,9 +75,11 @@ function Opening({ onStart }: { onStart: () => void }) {
           see three no-annual-fee cards, with what each would pay you back in the first year and
           in every year after it.
         </p>
-        <div className="mt-6 flex flex-wrap gap-2.5">
-          <Button onClick={onStart}>Find my card</Button>
-          <Link href="/results?example=1" className={buttonClass('secondary')}>
+        <div className="mt-7 flex flex-col gap-2.5 sm:flex-row">
+          <Button onClick={onStart} className="w-full sm:w-auto sm:min-w-[200px]">
+            Find my card
+          </Button>
+          <Link href="/results?example=1" className={buttonClass('secondary', 'md', 'w-full sm:w-auto')}>
             See an example result first
           </Link>
         </div>

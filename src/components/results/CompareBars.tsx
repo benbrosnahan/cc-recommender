@@ -58,7 +58,7 @@ export function CompareBars({ top3, scaleMax }: Props) {
           <LegendDot kind="later" /> Rewards on your spending, every year
         </li>
         <li className="flex items-center gap-2">
-          <LegendDot kind="extra" /> Welcome bonus or match, first year only
+          <LegendDot kind="extra" /> Bonus, match or boosted rate, first year only
         </li>
       </ul>
 
