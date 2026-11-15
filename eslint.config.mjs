@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The audit kit has its own dependencies and is not part of the app.
+    "audits/**",
   ]),
 ]);
 

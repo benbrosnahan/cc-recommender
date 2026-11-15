@@ -1,0 +1,24 @@
+{
+  "name": "cc-recommender-audits",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Audit kit for Card Picker by Cense: scans, accessibility, security, SEO and an independent money oracle. Isolated from the app's dependencies.",
+  "engines": {
+    "node": ">=22.19"
+  },
+  "scripts": {
+    "setup": "playwright install chromium",
+    "audit": "node run.mjs",
+    "audit:live": "node run.mjs --url https://cense.vercel.app/",
+    "test": "playwright test",
+    "screenshots": "node screenshots.mjs --url http://localhost:3204 --out screenshots/latest"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.64.1",
+    "cheerio": "1.2.0",
+    "lighthouse": "13.6.0",
+    "puppeteer-core": "25.16.0"
+  }
+}
