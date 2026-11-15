@@ -2,16 +2,17 @@
 // the console, and no request leaves the site (the footer promises "nothing you answer here leaves your browser").
 import { test, expect, PHONE, readPicks, ANSWERS_KEY } from './helpers.mjs';
 
+/** Records console errors and every request to an origin other than the app's own. */
 function watch(page) {
   const errors = [];
   const offsite = [];
+  const home = new URL(test.info().project.use.baseURL).origin;
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   page.on('pageerror', e => errors.push(e.message));
   page.on('request', r => {
     const u = new URL(r.url());
-    if (!['localhost', '127.0.0.1'].includes(u.hostname) && u.origin !== new URL(page.url() || 'http://x').origin) {
-      if (!u.protocol.startsWith('data') && !u.protocol.startsWith('blob')) offsite.push(r.url());
-    }
+    if (['data:', 'blob:'].includes(u.protocol)) return;
+    if (u.origin !== home) offsite.push(r.url());
   });
   return { errors, offsite };
 }
