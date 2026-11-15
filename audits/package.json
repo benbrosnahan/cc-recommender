@@ -10,7 +10,7 @@
   "scripts": {
     "setup": "playwright install chromium",
     "audit": "node run.mjs",
-    "audit:live": "node run.mjs --url https://cense.vercel.app/",
+    "audit:live": "node run.mjs --url https://cense-card-recommender.vercel.app/",
     "test": "playwright test",
     "screenshots": "node screenshots.mjs --url http://localhost:3204 --out screenshots/latest"
   },

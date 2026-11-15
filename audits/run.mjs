@@ -23,7 +23,7 @@ import { runInpProbe, STEP_NAMES as INP_STEPS } from './probes/inp.mjs';
 import { runReadableProbe, THROTTLE as READABLE_THROTTLE, VIEWPORT as READABLE_VIEWPORT } from './probes/readable.mjs';
 
 const KIT_DIR = path.dirname(fileURLToPath(import.meta.url));
-const LIVE_URL = 'https://cense.vercel.app/';
+const LIVE_URL = 'https://cense-card-recommender.vercel.app/';
 const STEPS = ['lighthouse', 'flow', 'security', 'geo', 'design', 'ux', 'tools', 'responsive', 'inp', 'readable'];
 const FORM_FACTORS = ['mobile', 'desktop'];
 // The viewports the UX and design steps measure at, and the site type they are given.

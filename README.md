@@ -2,6 +2,9 @@
 
 **Live: [cense-card-recommender.vercel.app](https://cense-card-recommender.vercel.app)**
 
+That is the canonical address. The same build is also served at cense.vercel.app, which keeps
+working but points search engines and link previews back here.
+
 Five questions, three no-annual-fee card recommendations, each with what it would pay back in
 dollars in the first year and in every year after, based on the spending the user just described.
 
