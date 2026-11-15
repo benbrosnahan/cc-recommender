@@ -1,0 +1,647 @@
+{
+ "url": "http://localhost:3204/",
+ "results": {
+  "header-check": {
+   "url": "http://localhost:3204/",
+   "statusCode": 200,
+   "allHeaders": {
+    "cache-control": "s-maxage=31536000",
+    "connection": "close",
+    "content-length": "16730",
+    "content-security-policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests",
+    "content-type": "text/html; charset=utf-8",
+    "date": "Sun, 15 Nov 2026 18:16:04 GMT",
+    "etag": "\"lj3v5wb82ycwq\"",
+    "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=()",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "vary": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-nextjs-cache": "HIT",
+    "x-nextjs-prerender": "1, 1",
+    "x-nextjs-stale-time": "300"
+   },
+   "analysis": [
+    {
+     "name": "Cache-Control",
+     "value": "s-maxage=31536000",
+     "status": "good",
+     "recommendation": "Cache-Control is configured."
+    },
+    {
+     "name": "Content-Encoding",
+     "value": null,
+     "status": "warning",
+     "recommendation": "Enable gzip or Brotli compression to reduce transfer sizes by 60-80%."
+    },
+    {
+     "name": "Strict-Transport-Security",
+     "value": null,
+     "status": "missing",
+     "recommendation": "Add HSTS header: \"max-age=63072000; includeSubDomains; preload\""
+    },
+    {
+     "name": "X-Content-Type-Options",
+     "value": "nosniff",
+     "status": "good",
+     "recommendation": "X-Content-Type-Options is set."
+    },
+    {
+     "name": "X-Frame-Options",
+     "value": "DENY",
+     "status": "good",
+     "recommendation": "X-Frame-Options is set."
+    },
+    {
+     "name": "Content-Security-Policy",
+     "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests",
+     "status": "good",
+     "recommendation": "Content-Security-Policy is set."
+    },
+    {
+     "name": "Referrer-Policy",
+     "value": "strict-origin-when-cross-origin",
+     "status": "good",
+     "recommendation": "Referrer-Policy is set."
+    },
+    {
+     "name": "Permissions-Policy",
+     "value": "camera=(), microphone=(), geolocation=(), payment=()",
+     "status": "good",
+     "recommendation": "Permissions-Policy is set."
+    },
+    {
+     "name": "ETag",
+     "value": "\"lj3v5wb82ycwq\"",
+     "status": "good",
+     "recommendation": "ETag is set for conditional requests."
+    },
+    {
+     "name": "Vary",
+     "value": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding",
+     "status": "good",
+     "recommendation": "Vary header set: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding"
+    }
+   ],
+   "summary": {
+    "good": 8,
+    "warnings": 1,
+    "missing": 1,
+    "total": 10
+   },
+   "score": 80
+  },
+  "meta-validate": {
+   "url": "http://localhost:3204/",
+   "tags": [
+    {
+     "name": "title",
+     "content": "Card Picker by Cense: your first credit card, in dollars",
+     "status": "good",
+     "recommendation": "Title is 56 chars. Good length."
+    },
+    {
+     "name": "meta description",
+     "content": "Five questions, three no-annual-fee credit cards, and what each would pay you back in the first year and every year after. No affiliate links.",
+     "status": "good",
+     "recommendation": "Description is 142 chars. Good length."
+    },
+    {
+     "name": "viewport",
+     "content": "width=device-width, initial-scale=1",
+     "status": "good",
+     "recommendation": "Viewport is set."
+    },
+    {
+     "name": "canonical",
+     "content": "https://cense.vercel.app",
+     "status": "good",
+     "recommendation": "Canonical URL: https://cense.vercel.app"
+    },
+    {
+     "name": "og:title",
+     "content": "Card Picker by Cense",
+     "status": "good",
+     "recommendation": "Set to: Card Picker by Cense"
+    },
+    {
+     "name": "og:description",
+     "content": "Your first credit card, in dollars instead of points. Five questions, three no-annual-fee picks.",
+     "status": "good",
+     "recommendation": "Set to: Your first credit card, in dollars instead of points. Five questions, three no-a..."
+    },
+    {
+     "name": "og:image",
+     "content": null,
+     "status": "missing",
+     "recommendation": "Add og:image for better social media sharing."
+    },
+    {
+     "name": "og:url",
+     "content": "https://cense.vercel.app",
+     "status": "good",
+     "recommendation": "Set to: https://cense.vercel.app"
+    },
+    {
+     "name": "og:type",
+     "content": "website",
+     "status": "good",
+     "recommendation": "Set to: website"
+    },
+    {
+     "name": "twitter:card",
+     "content": "summary",
+     "status": "good",
+     "recommendation": "Set to: summary"
+    },
+    {
+     "name": "twitter:title",
+     "content": "Card Picker by Cense",
+     "status": "good",
+     "recommendation": "Set to: Card Picker by Cense"
+    },
+    {
+     "name": "twitter:description",
+     "content": "Your first credit card, in dollars instead of points. Five questions, three no-annual-fee picks.",
+     "status": "good",
+     "recommendation": "Set to: Your first credit card, in dollars instead of points. Five questions, three no-a..."
+    },
+    {
+     "name": "twitter:image",
+     "content": null,
+     "status": "warning",
+     "recommendation": "Add twitter:image for Twitter card previews."
+    },
+    {
+     "name": "lang attribute",
+     "content": "en",
+     "status": "good",
+     "recommendation": "Language: en"
+    },
+    {
+     "name": "favicon",
+     "content": "/icon.svg?icon.3si7ck2ylfrqz.svg",
+     "status": "good",
+     "recommendation": "Favicon found: /icon.svg?icon.3si7ck2ylfrqz.svg"
+    }
+   ],
+   "preview": {
+    "title": "Card Picker by Cense",
+    "description": "Your first credit card, in dollars instead of points. Five questions, three no-annual-fee picks.",
+    "image": null,
+    "url": "https://cense.vercel.app",
+    "siteName": "Cense"
+   },
+   "summary": {
+    "good": 13,
+    "warnings": 1,
+    "missing": 1,
+    "total": 15
+   },
+   "score": 87
+  },
+  "structured-data": {
+   "url": "http://localhost:3204/",
+   "totalSchemas": 1,
+   "items": [
+    {
+     "type": "WebApplication",
+     "source": "json-ld",
+     "raw": "{\"@context\":\"https://schema.org\",\"@type\":\"WebApplication\",\"name\":\"Card Picker by Cense\",\"url\":\"https://cense.vercel.app\",\"applicationCategory\":\"FinanceApplication\",\"operatingSystem\":\"Any\",\"description\":\"Five questions, three no-annual-fee credit cards for students, and what each would pay back in the first year and every year after. No affiliate links.\",\"offers\":{\"@type\":\"Offer\",\"price\":\"0\",\"priceCurrency\":\"USD\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"Cense\",\"url\":\"https://cense.beehiiv.com\"}}",
+     "parsed": {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Card Picker by Cense",
+      "url": "https://cense.vercel.app",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "description": "Five questions, three no-annual-fee credit cards for students, and what each would pay back in the first year and every year after. No affiliate links.",
+      "offers": {
+       "@type": "Offer",
+       "price": "0",
+       "priceCurrency": "USD"
+      },
+      "publisher": {
+       "@type": "Organization",
+       "name": "Cense",
+       "url": "https://cense.beehiiv.com"
+      }
+     },
+     "errors": [],
+     "warnings": [
+      "Schema type \"WebApplication\" is valid but not in our validation database. Basic checks only."
+     ],
+     "properties": [
+      {
+       "name": "name",
+       "value": "Card Picker by Cense",
+       "required": false,
+       "present": true
+      },
+      {
+       "name": "url",
+       "value": "https://cense.vercel.app",
+       "required": false,
+       "present": true
+      },
+      {
+       "name": "applicationCategory",
+       "value": "FinanceApplication",
+       "required": false,
+       "present": true
+      },
+      {
+       "name": "operatingSystem",
+       "value": "Any",
+       "required": false,
+       "present": true
+      },
+      {
+       "name": "description",
+       "value": "Five questions, three no-annual-fee credit cards for students, and what each wou...",
+       "required": false,
+       "present": true
+      },
+      {
+       "name": "offers",
+       "value": "{Offer}",
+       "required": false,
+       "present": true
+      },
+      {
+       "name": "publisher",
+       "value": "{Organization}",
+       "required": false,
+       "present": true
+      }
+     ]
+    }
+   ],
+   "summary": {
+    "total": 1,
+    "valid": 1,
+    "withErrors": 0,
+    "totalErrors": 0,
+    "totalWarnings": 1,
+    "jsonLd": 1,
+    "microdata": 0
+   },
+   "richResultEligibility": {
+    "eligible": false,
+    "types": []
+   }
+  },
+  "sitemap-validate": {
+   "sitemapUrl": "http://localhost:3204/sitemap.xml",
+   "found": true,
+   "isSitemapIndex": false,
+   "totalUrls": 2,
+   "checkedUrls": 2,
+   "urls": [
+    {
+     "loc": "https://cense.vercel.app/",
+     "lastmod": "2026-11-15T00:00:00.000Z",
+     "status": 200,
+     "statusText": "ok",
+     "responseTimeMs": 89,
+     "issues": []
+    },
+    {
+     "loc": "https://cense.vercel.app/cards",
+     "lastmod": "2026-11-15T00:00:00.000Z",
+     "status": 200,
+     "statusText": "ok",
+     "responseTimeMs": 86,
+     "issues": []
+    }
+   ],
+   "uncheckedUrls": [],
+   "missingCommonPages": [
+    "http://localhost:3204/"
+   ],
+   "duplicates": [],
+   "issues": [
+    "1 common page(s) exist but are missing from sitemap: http://localhost:3204/"
+   ],
+   "summary": {
+    "total": 2,
+    "checked": 2,
+    "ok": 2,
+    "redirects": 0,
+    "errors": 0,
+    "dead": 0,
+    "slow": 0,
+    "duplicates": 0,
+    "missingCommon": 1
+   }
+  },
+  "redirect-check": {
+   "url": "http://localhost:3204/",
+   "finalUrl": "http://localhost:3204/",
+   "finalStatus": 200,
+   "hops": [
+    {
+     "url": "http://localhost:3204/",
+     "statusCode": 200,
+     "location": null,
+     "timeMs": 1
+    }
+   ],
+   "redirectCount": 0,
+   "totalTimeMs": 1,
+   "status": "good",
+   "message": "No redirects detected. URL resolves directly."
+  },
+  "broken-links": {
+   "url": "http://localhost:3204/",
+   "depth": "page",
+   "pagesScanned": 1,
+   "pagesScannedList": [
+    "http://localhost:3204/"
+   ],
+   "totalLinks": 18,
+   "totalDiscoveredLinks": 18,
+   "links": [
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/",
+     "anchorText": "CenseCard Picker",
+     "linkType": "a",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 4,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/cards",
+     "anchorText": "All 13 cards",
+     "linkType": "a",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 3,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/results?example=1",
+     "anchorText": "See an example result first",
+     "linkType": "a",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 4,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "https://cense.beehiiv.com/",
+     "anchorText": "Cense",
+     "linkType": "a",
+     "isInternal": false,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 257,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/_next/static/chunks/2r4s4h5xul1n-.js",
+     "anchorText": "",
+     "linkType": "script",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 4,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/_next/static/chunks/3wbm-994r45kr.js",
+     "anchorText": "",
+     "linkType": "script",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 4,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/_next/static/chunks/2e268anpfvdoc.js",
+     "anchorText": "",
+     "linkType": "script",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 4,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/_next/static/chunks/turbopack-3-ry682tkyiqk.js",
+     "anchorText": "",
+     "linkType": "script",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 7,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/_next/static/chunks/0dovbkmadb1ks.js",
+     "anchorText": "",
+     "linkType": "script",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 7,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/_next/static/chunks/1232dlp53lwpp.js",
+     "anchorText": "",
+     "linkType": "script",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 6,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/_next/static/chunks/0pc11-ekwc9u0.js",
+     "anchorText": "",
+     "linkType": "script",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 6,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/_next/static/chunks/0cz1d0mv5g_q7.js",
+     "anchorText": "",
+     "linkType": "script",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 6,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/_next/static/chunks/1x6obpmlu1_c2.js",
+     "anchorText": "",
+     "linkType": "script",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 6,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/_next/static/media/4cf231d25563e07b-s.p.2874ccu1_u7jf.woff2",
+     "anchorText": "preload",
+     "linkType": "link",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 7,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/_next/static/media/8056169c9d560660-s.p.41rroleoq1br7.woff2",
+     "anchorText": "preload",
+     "linkType": "link",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 6,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/_next/static/chunks/2bb5q6fs7ddof.css",
+     "anchorText": "stylesheet",
+     "linkType": "link",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 7,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "https://cense.vercel.app/",
+     "anchorText": "canonical",
+     "linkType": "link",
+     "isInternal": false,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 91,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    },
+    {
+     "sourceUrl": "http://localhost:3204/",
+     "targetUrl": "http://localhost:3204/icon.svg?icon.3si7ck2ylfrqz.svg",
+     "anchorText": "icon",
+     "linkType": "link",
+     "isInternal": true,
+     "statusCode": 200,
+     "statusText": "ok",
+     "responseTimeMs": 8,
+     "sources": [
+      "http://localhost:3204/"
+     ]
+    }
+   ],
+   "summary": {
+    "total": 18,
+    "ok": 18,
+    "broken": 0,
+    "redirects": 0,
+    "errors": 0,
+    "timeouts": 0
+   }
+  },
+  "webmcp-check": {
+   "url": "http://localhost:3204/",
+   "aiReadinessScore": 0,
+   "mcpDiscovery": {
+    "score": 0,
+    "found": false,
+    "valid": false,
+    "hasAuth": false,
+    "data": null,
+    "errors": [
+     "HTTP 404 response from http://localhost:3204/.well-known/mcp.json."
+    ]
+   },
+   "webmcpDeclarative": {
+    "score": 0,
+    "toolCount": 0,
+    "tools": [],
+    "findings": [
+     "No declarative WebMCP tools found (no toolname attributes in HTML)."
+    ]
+   },
+   "webmcpImperative": {
+    "score": 0,
+    "detected": false,
+    "registerToolCalls": 0,
+    "findings": [
+     "No imperative WebMCP tool registration detected in inline scripts.",
+     "Note: This check cannot detect tools registered via external JavaScript files."
+    ]
+   },
+   "recommendations": [
+    "Add a .well-known/mcp.json file to enable MCP server discovery. This lets AI agents find and connect to your API endpoints automatically.",
+    "Add WebMCP declarative tools to your HTML using toolname attributes on <form> elements. Example: <form toolname=\"search\" tooldescription=\"Search products\"> to expose functionality to AI agents.",
+    "Consider implementing imperative WebMCP tools using navigator.modelContext.registerTool() for dynamic tool registration that depends on runtime state.",
+    "This page has no AI/MCP integration. Start with .well-known/mcp.json for server discovery or add toolname attributes to existing forms for quick wins."
+   ]
+  }
+ }
+}

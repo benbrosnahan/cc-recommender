@@ -1,0 +1,1142 @@
+{
+ "state": "empty",
+ "formFactor": "desktop",
+ "pageContext": {
+  "indexable": true,
+  "siteType": "saas"
+ },
+ "report": {
+  "uxScore": null,
+  "typographyScore": null,
+  "contrastScore": null,
+  "layoutScore": null,
+  "responsiveScore": null,
+  "navigationScore": null,
+  "contentScore": null,
+  "totalIssues": 4,
+  "p1Count": 0,
+  "p2Count": 4,
+  "p3Count": 0,
+  "findings": [
+   {
+    "id": "0b5c3cf4-19cf-4f03-9637-36189b72f3ef",
+    "severity": "P2",
+    "category": "Accessibility",
+    "device": "desktop",
+    "title": "4 pointer target(s) smaller than M3's comfortable 48×48px at 1440px wide",
+    "description": "4 pointer target(s) smaller than M3's comfortable 48×48px at 1440px wide — they clear the WCAG 2.5.8 24px minimum (2 via the inline exception). Examples: a.font-semibold.text-slate-900 \"Cense\" (42×18px); a.font-semibold.text-slate-900 \"See all 13 cards we compare\" (182×18px); a.inline-flex.min-h-[40px] \"All 13 cards\" (97×40px). Measured at the 1440×900px desktop viewport.",
+    "recommendation": "Fix it once in the shared style or component that produces it, so every instance changes together.",
+    "source": "engine",
+    "themeId": "eng:tap-target-comfort",
+    "scope": "element",
+    "renderContext": "dom",
+    "observedOn": 1,
+    "sampleSize": 1,
+    "viewport": {
+     "width": 1440,
+     "height": 900,
+     "dpr": 1,
+     "isMobile": false
+    },
+    "wcagCriterion": "2.5.8",
+    "evidence": {
+     "measured": "42×18px",
+     "required": "≥48×48px",
+     "selector": "a.font-semibold.text-slate-900",
+     "sample": "Cense",
+     "count": 4
+    }
+   },
+   {
+    "id": "43c10a52-b50f-460f-a740-2035b8395323",
+    "severity": "P2",
+    "category": "Typography",
+    "device": "desktop",
+    "title": "5 reading-copy text node(s) below 16px (or any text below 11px).",
+    "description": "5 reading-copy text node(s) below 16px (or any text below 11px). Examples: p.mt-2.text-sm \"No Social Security number, no credit che\" (14px); p.mt-2.text-sm \"See all 13 cards we compare, and the 4 w\" (14px); p.text-sm.font-semibold \"Nobody pays Cense when you apply for a c\" (14px). Measured at the 1440×900px desktop viewport.",
+    "recommendation": "Raise reading copy to at least 16px (12px absolute minimum for any text).",
+    "source": "engine",
+    "themeId": "eng:small-body-text",
+    "scope": "element",
+    "renderContext": "dom",
+    "observedOn": 1,
+    "sampleSize": 1,
+    "viewport": {
+     "width": 1440,
+     "height": 900,
+     "dpr": 1,
+     "isMobile": false
+    },
+    "evidence": {
+     "measured": "14px",
+     "required": "≥16px (≥11px absolute)",
+     "selector": "p.mt-2.text-sm",
+     "sample": "No Social Security number, no credit che",
+     "count": 5
+    }
+   },
+   {
+    "id": "ff8aec12-620c-4ca9-970c-74de0a383d64",
+    "severity": "P2",
+    "category": "Design Consistency",
+    "device": "desktop",
+    "title": "1 border-radius value(s) off the 7-step scale (0/4/8/12/16/28/full).",
+    "description": "1 border-radius value(s) off the 7-step scale (0/4/8/12/16/28/full).",
+    "recommendation": "Consolidate to a small token set: define CSS variables for the sanctioned values and replace ad-hoc ones.",
+    "source": "engine",
+    "themeId": "eng:radius-off-scale",
+    "scope": "page",
+    "renderContext": "dom",
+    "observedOn": 1,
+    "sampleSize": 1,
+    "viewport": {
+     "width": 1440,
+     "height": 900,
+     "dpr": 1,
+     "isMobile": false
+    },
+    "evidence": {
+     "measured": "0 matches for div.rounded-3xl.border",
+     "contributors": [
+      {
+       "selector": "div.rounded-3xl.border",
+       "value": "24px · 2 node(s)"
+      }
+     ]
+    }
+   },
+   {
+    "id": "007d25a8-5c42-4952-97ec-a1cf52b9fd15",
+    "severity": "P2",
+    "category": "Motion",
+    "device": "desktop",
+    "title": "1 animation/transition(s) under 50ms (non-instant but too fast to read).",
+    "description": "1 animation/transition(s) under 50ms (non-instant but too fast to read). Examples: *, ::before, ::after.",
+    "recommendation": "Keep animation durations within the 50–1000ms scale — long enough to read, short enough to feel responsive.",
+    "source": "engine",
+    "themeId": "eng:duration-too-short",
+    "scope": "element",
+    "renderContext": "dom",
+    "observedOn": 1,
+    "sampleSize": 1,
+    "viewport": {
+     "width": 1440,
+     "height": 900,
+     "dpr": 1,
+     "isMobile": false
+    },
+    "evidence": {
+     "measured": "1 occurrence(s)",
+     "required": "50–1000ms",
+     "selector": "*, ::before, ::after",
+     "count": 1
+    }
+   }
+  ],
+  "pageContext": {
+   "indexable": true,
+   "siteType": "saas"
+  },
+  "scanData": {
+   "domContext": {
+    "textElements": [
+     {
+      "tag": "a",
+      "text": "CenseCard Picker",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "lineHeight": "24px",
+      "color": "rgb(39, 91, 45)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 2.62,
+      "x": 360,
+      "y": 28,
+      "width": 179,
+      "height": 40
+     },
+     {
+      "tag": "span",
+      "text": "Cense",
+      "fontSize": "20px",
+      "fontWeight": "700",
+      "lineHeight": "28px",
+      "color": "rgb(168, 83, 31)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 3.92,
+      "x": 360,
+      "y": 34,
+      "width": 60,
+      "height": 28
+     },
+     {
+      "tag": "span",
+      "text": "Card Picker",
+      "fontSize": "20px",
+      "fontWeight": "700",
+      "lineHeight": "28px",
+      "color": "rgb(39, 91, 45)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 2.62,
+      "x": 426,
+      "y": 34,
+      "width": 113,
+      "height": 28
+     },
+     {
+      "tag": "span",
+      "text": "No affiliate links",
+      "fontSize": "13px",
+      "fontWeight": "600",
+      "lineHeight": "19.2px",
+      "color": "rgb(47, 97, 51)",
+      "backgroundColor": "rgb(234, 243, 231)",
+      "contrastRatio": 6.42,
+      "x": 838,
+      "y": 32,
+      "width": 140,
+      "height": 31
+     },
+     {
+      "tag": "a",
+      "text": "All 13 cards",
+      "fontSize": "14px",
+      "fontWeight": "600",
+      "lineHeight": "20px",
+      "color": "rgb(47, 97, 51)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 2.88,
+      "x": 983,
+      "y": 28,
+      "width": 97,
+      "height": 40
+     },
+     {
+      "tag": "h1",
+      "text": "Your first credit card, in dollars.",
+      "fontSize": "60px",
+      "fontWeight": "700",
+      "lineHeight": "62.4px",
+      "color": "rgb(39, 91, 45)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 2.62,
+      "x": 360,
+      "y": 132,
+      "width": 720,
+      "height": 125
+     },
+     {
+      "tag": "p",
+      "text": "Card sites talk in points, and most are paid when ",
+      "fontSize": "18px",
+      "fontWeight": "400",
+      "lineHeight": "29.25px",
+      "color": "rgb(58, 107, 62)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 3.35,
+      "x": 360,
+      "y": 273,
+      "width": 576,
+      "height": 88
+     },
+     {
+      "tag": "button",
+      "text": "Find my card",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "lineHeight": "24px",
+      "color": "rgb(255, 255, 255)",
+      "backgroundColor": "rgb(39, 91, 45)",
+      "contrastRatio": 8.01,
+      "x": 360,
+      "y": 389,
+      "width": 200,
+      "height": 50
+     },
+     {
+      "tag": "a",
+      "text": "See an example result first",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "lineHeight": "24px",
+      "color": "rgb(39, 91, 45)",
+      "backgroundColor": "rgb(255, 255, 255)",
+      "contrastRatio": 8.01,
+      "x": 570,
+      "y": 389,
+      "width": 240,
+      "height": 50
+     },
+     {
+      "tag": "p",
+      "text": "What you will need",
+      "fontSize": "13px",
+      "fontWeight": "600",
+      "lineHeight": "19.2px",
+      "color": "rgb(74, 110, 77)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 3.63,
+      "x": 381,
+      "y": 492,
+      "width": 312,
+      "height": 19
+     },
+     {
+      "tag": "p",
+      "text": "A rough idea of what you spend in a month and wher",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "lineHeight": "26px",
+      "color": "rgb(47, 97, 51)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 2.88,
+      "x": 381,
+      "y": 519,
+      "width": 312,
+      "height": 52
+     },
+     {
+      "tag": "p",
+      "text": "No Social Security number, no credit check, no ema",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": "22.75px",
+      "color": "rgb(74, 110, 77)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 3.63,
+      "x": 381,
+      "y": 579,
+      "width": 312,
+      "height": 46
+     },
+     {
+      "tag": "p",
+      "text": "What we left out",
+      "fontSize": "13px",
+      "fontWeight": "600",
+      "lineHeight": "19.2px",
+      "color": "rgb(74, 110, 77)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 3.63,
+      "x": 747,
+      "y": 492,
+      "width": 312,
+      "height": 19
+     },
+     {
+      "tag": "p",
+      "text": "Every card with an annual fee. Nobody should pay a",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "lineHeight": "26px",
+      "color": "rgb(47, 97, 51)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 2.88,
+      "x": 747,
+      "y": 519,
+      "width": 312,
+      "height": 78
+     },
+     {
+      "tag": "p",
+      "text": "See all 13 cards we compare, and the 4 we looked a",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": "22.75px",
+      "color": "rgb(74, 110, 77)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 3.63,
+      "x": 747,
+      "y": 605,
+      "width": 312,
+      "height": 46
+     },
+     {
+      "tag": "a",
+      "text": "See all 13 cards we compare",
+      "fontSize": "14px",
+      "fontWeight": "600",
+      "lineHeight": "22.75px",
+      "color": "rgb(39, 91, 45)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 2.62,
+      "x": 747,
+      "y": 607,
+      "width": 182,
+      "height": 18
+     },
+     {
+      "tag": "p",
+      "text": "Nobody pays Cense when you apply for a card. The l",
+      "fontSize": "14px",
+      "fontWeight": "600",
+      "lineHeight": "22.75px",
+      "color": "rgb(47, 97, 51)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 2.88,
+      "x": 360,
+      "y": 752,
+      "width": 720,
+      "height": 46
+     },
+     {
+      "tag": "p",
+      "text": "These are estimates, not financial advice. Banks c",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": "22.75px",
+      "color": "rgb(74, 110, 77)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 3.63,
+      "x": 360,
+      "y": 806,
+      "width": 720,
+      "height": 68
+     },
+     {
+      "tag": "p",
+      "text": "Built by Cense, a free weekly personal finance new",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": "22.75px",
+      "color": "rgb(74, 110, 77)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 3.63,
+      "x": 360,
+      "y": 882,
+      "width": 720,
+      "height": 23
+     },
+     {
+      "tag": "a",
+      "text": "Cense",
+      "fontSize": "14px",
+      "fontWeight": "600",
+      "lineHeight": "22.75px",
+      "color": "rgb(39, 91, 45)",
+      "backgroundColor": "rgba(0, 0, 0, 0)",
+      "contrastRatio": 2.62,
+      "x": 410,
+      "y": 884,
+      "width": 42,
+      "height": 18
+     }
+    ],
+    "interactiveElements": [
+     {
+      "tag": "a",
+      "text": "CenseCard Picker",
+      "width": 179,
+      "height": 40,
+      "x": 360,
+      "y": 28
+     },
+     {
+      "tag": "a",
+      "text": "All 13 cards",
+      "width": 97,
+      "height": 40,
+      "x": 983,
+      "y": 28
+     },
+     {
+      "tag": "button",
+      "text": "Find my card",
+      "width": 200,
+      "height": 50,
+      "x": 360,
+      "y": 389
+     },
+     {
+      "tag": "a",
+      "text": "See an example result first",
+      "width": 240,
+      "height": 50,
+      "x": 570,
+      "y": 389
+     },
+     {
+      "tag": "a",
+      "text": "See all 13 cards we compare",
+      "width": 182,
+      "height": 18,
+      "x": 747,
+      "y": 607
+     },
+     {
+      "tag": "a",
+      "text": "Cense",
+      "width": 42,
+      "height": 18,
+      "x": 410,
+      "y": 884
+     }
+    ],
+    "images": [],
+    "headings": [
+     {
+      "tag": "h1",
+      "text": "Your first credit card, in dollars.",
+      "fontSize": "60px",
+      "x": 360,
+      "y": 132,
+      "width": 720,
+      "height": 125
+     }
+    ],
+    "overflowElements": [],
+    "stickyElements": [],
+    "documentDimensions": {
+     "scrollHeight": 945,
+     "clientHeight": 900,
+     "scrollWidth": 1440,
+     "clientWidth": 1440
+    }
+   }
+  }
+ },
+ "design": {
+  "report": {
+   "score": 88.6,
+   "grade": "B",
+   "buckets": {
+    "accessibility": {
+     "score": 26.4,
+     "max": 30,
+     "findings": [
+      {
+       "severity": "warn",
+       "ruleId": "tap-target-comfort",
+       "message": "4 pointer target(s) smaller than M3's comfortable 48×48px at 1440px wide — they clear the WCAG 2.5.8 24px minimum (2 via the inline exception).",
+       "count": 4,
+       "examples": [
+        {
+         "sig": "a.font-semibold.text-slate-900",
+         "tag": "a",
+         "w": 42,
+         "h": 18,
+         "sample": "Cense",
+         "viewport": {
+          "width": 1440,
+          "height": 900,
+          "dpr": 1,
+          "isMobile": false,
+          "w": 1440,
+          "h": 900
+         },
+         "exception": "inline"
+        },
+        {
+         "sig": "a.font-semibold.text-slate-900",
+         "tag": "a",
+         "w": 182,
+         "h": 18,
+         "sample": "See all 13 cards we compare",
+         "viewport": {
+          "width": 1440,
+          "height": 900,
+          "dpr": 1,
+          "isMobile": false,
+          "w": 1440,
+          "h": 900
+         },
+         "exception": "inline"
+        },
+        {
+         "sig": "a.inline-flex.min-h-[40px]",
+         "tag": "a",
+         "w": 97,
+         "h": 40,
+         "sample": "All 13 cards",
+         "viewport": {
+          "width": 1440,
+          "height": 900,
+          "dpr": 1,
+          "isMobile": false,
+          "w": 1440,
+          "h": 900
+         }
+        },
+        {
+         "sig": "a.inline-flex.min-h-[40px]",
+         "tag": "a",
+         "w": 179,
+         "h": 40,
+         "sample": "CenseCard Picker",
+         "viewport": {
+          "width": 1440,
+          "height": 900,
+          "dpr": 1,
+          "isMobile": false,
+          "w": 1440,
+          "h": 900
+         }
+        }
+       ],
+       "scope": "element",
+       "required": "≥48×48px",
+       "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "isMobile": false,
+        "w": 1440,
+        "h": 900
+       },
+       "wcagCriterion": "2.5.8"
+      }
+     ]
+    },
+    "consistency": {
+     "score": 15.2,
+     "max": 20,
+     "findings": [
+      {
+       "severity": "warn",
+       "ruleId": "small-body-text",
+       "message": "5 reading-copy text node(s) below 16px (or any text below 11px).",
+       "count": 5,
+       "examples": [
+        {
+         "sig": "p.mt-2.text-sm",
+         "px": 14,
+         "sample": "No Social Security number, no credit che"
+        },
+        {
+         "sig": "p.mt-2.text-sm",
+         "px": 14,
+         "sample": "See all 13 cards we compare, and the 4 w"
+        },
+        {
+         "sig": "p.text-sm.font-semibold",
+         "px": 14,
+         "sample": "Nobody pays Cense when you apply for a c"
+        },
+        {
+         "sig": "p.mt-2.text-sm",
+         "px": 14,
+         "sample": "These are estimates, not financial advic"
+        },
+        {
+         "sig": "p.mt-2.text-sm",
+         "px": 14,
+         "sample": "Built by Cense, a free weekly personal f"
+        }
+       ],
+       "scope": "element",
+       "renderContext": "dom",
+       "required": "≥16px (≥11px absolute)",
+       "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "isMobile": false,
+        "w": 1440,
+        "h": 900
+       }
+      },
+      {
+       "severity": "info",
+       "ruleId": "small-ui-labels",
+       "message": "6 UI label(s) at 12-15.9px — legitimate M3 label roles (not scored); verify their tap targets meet 48px.",
+       "count": 6,
+       "examples": [
+        {
+         "sig": "span.hidden.items-center",
+         "px": 13,
+         "sample": "No affiliate links"
+        },
+        {
+         "sig": "a.inline-flex.min-h-[40px]",
+         "px": 14,
+         "sample": "All 13 cards"
+        },
+        {
+         "sig": "p.text-xs.font-semibold",
+         "px": 13,
+         "sample": "What you will need"
+        },
+        {
+         "sig": "p.text-xs.font-semibold",
+         "px": 13,
+         "sample": "What we left out"
+        },
+        {
+         "sig": "a.font-semibold.text-slate-900",
+         "px": 14,
+         "sample": "See all 13 cards we compare"
+        },
+        {
+         "sig": "a.font-semibold.text-slate-900",
+         "px": 14,
+         "sample": "Cense"
+        }
+       ],
+       "scope": "element",
+       "renderContext": "dom",
+       "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "isMobile": false,
+        "w": 1440,
+        "h": 900
+       }
+      },
+      {
+       "severity": "warn",
+       "ruleId": "radius-off-scale",
+       "message": "1 border-radius value(s) off the 7-step scale (0/4/8/12/16/28/full).",
+       "values": [
+        24
+       ],
+       "scope": "page",
+       "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "isMobile": false,
+        "w": 1440,
+        "h": 900
+       },
+       "contributors": [
+        {
+         "selector": "div.rounded-3xl.border",
+         "value": "24px · 2 node(s)"
+        }
+       ]
+      }
+     ]
+    },
+    "motion": {
+     "score": 22,
+     "max": 25,
+     "findings": [
+      {
+       "severity": "warn",
+       "ruleId": "duration-too-short",
+       "message": "1 animation/transition(s) under 50ms (non-instant but too fast to read).",
+       "examples": [
+        {
+         "selector": "*, ::before, ::after",
+         "sig": "*, ::before, ::after",
+         "ms": 0
+        }
+       ],
+       "scope": "element",
+       "required": "50–1000ms"
+      }
+     ]
+    },
+    "performance": {
+     "score": 25,
+     "max": 25,
+     "findings": []
+    }
+   },
+   "sections": {
+    "color": {
+     "sampled": 19,
+     "skippedUnknownBg": 0,
+     "skippedUnparseable": 0,
+     "skippedRenderContext": 0,
+     "distinctTextColors": 6,
+     "failureCount": 0,
+     "failures": []
+    },
+    "typography": {
+     "distinctFamilies": 2,
+     "families": [
+      "\"Bricolage Grotesque\", \"Bricolage Grotesque Fallback\", \"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sans-serif",
+      "\"Instrument Sans\", \"Instrument Sans Fallback\", system-ui, sans-serif"
+     ],
+     "distinctSizes": 6,
+     "sizes": [
+      13,
+      14,
+      16,
+      18,
+      20,
+      60
+     ],
+     "distinctLineHeights": 6,
+     "smallBodyCount": 5,
+     "smallBody": [
+      {
+       "sig": "p.mt-2.text-sm",
+       "px": 14,
+       "sample": "No Social Security number, no credit che"
+      },
+      {
+       "sig": "p.mt-2.text-sm",
+       "px": 14,
+       "sample": "See all 13 cards we compare, and the 4 w"
+      },
+      {
+       "sig": "p.text-sm.font-semibold",
+       "px": 14,
+       "sample": "Nobody pays Cense when you apply for a c"
+      },
+      {
+       "sig": "p.mt-2.text-sm",
+       "px": 14,
+       "sample": "These are estimates, not financial advic"
+      },
+      {
+       "sig": "p.mt-2.text-sm",
+       "px": 14,
+       "sample": "Built by Cense, a free weekly personal f"
+      }
+     ],
+     "smallLabelCount": 6,
+     "smallLabels": [
+      {
+       "sig": "span.hidden.items-center",
+       "px": 13,
+       "sample": "No affiliate links"
+      },
+      {
+       "sig": "a.inline-flex.min-h-[40px]",
+       "px": 14,
+       "sample": "All 13 cards"
+      },
+      {
+       "sig": "p.text-xs.font-semibold",
+       "px": 13,
+       "sample": "What you will need"
+      },
+      {
+       "sig": "p.text-xs.font-semibold",
+       "px": 13,
+       "sample": "What we left out"
+      },
+      {
+       "sig": "a.font-semibold.text-slate-900",
+       "px": 14,
+       "sample": "See all 13 cards we compare"
+      },
+      {
+       "sig": "a.font-semibold.text-slate-900",
+       "px": 14,
+       "sample": "Cense"
+      }
+     ],
+     "tightLeadingCount": 0,
+     "tightLeading": [],
+     "displayLeadingRelaxed": 0,
+     "formattedBlocksSkipped": 0,
+     "distinctHeadingSizes": 1,
+     "headingCount": 1,
+     "skippedRenderContext": 0
+    },
+    "shape": {
+     "distinctRadii": 3,
+     "radii": [
+      8,
+      24,
+      9999
+     ],
+     "scale": [
+      0,
+      4,
+      8,
+      12,
+      16,
+      28,
+      9999
+     ],
+     "offScaleValues": [
+      24
+     ]
+    },
+    "elevation": {
+     "distinctShadows": 1,
+     "levels": 6,
+     "recipes": [
+      "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(39, 91, 45, 0.04) 0px 1px 0px 0px, rgba(39, 91, 45, 0.18) 0px 8px 24px -12px"
+     ]
+    },
+    "states": {
+     "interactiveCount": 6,
+     "hasHoverRules": true,
+     "hasFocusVisibleRules": true,
+     "stylesheetsReachable": true,
+     "sheetsSkipped": 0,
+     "noVisibleFocusCount": 0,
+     "noVisibleFocusExamples": []
+    },
+    "motion": {
+     "hasReducedMotionQuery": true,
+     "reducedMotionStatus": "present",
+     "activeAnimations": 2,
+     "tooShort": [
+      {
+       "selector": "*, ::before, ::after",
+       "sig": "*, ::before, ::after",
+       "ms": 0
+      }
+     ],
+     "tooLong": [],
+     "linearMovement": [],
+     "easeInEntrance": [],
+     "layoutAnimated": [],
+     "infiniteLoops": [],
+     "sheetsSkipped": 0
+    },
+    "a11yLayout": {
+     "smallTargetCount": 4,
+     "smallTargets": [
+      {
+       "sig": "a.font-semibold.text-slate-900",
+       "tag": "a",
+       "w": 42,
+       "h": 18,
+       "sample": "Cense",
+       "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "isMobile": false,
+        "w": 1440,
+        "h": 900
+       },
+       "exception": "inline"
+      },
+      {
+       "sig": "a.font-semibold.text-slate-900",
+       "tag": "a",
+       "w": 182,
+       "h": 18,
+       "sample": "See all 13 cards we compare",
+       "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "isMobile": false,
+        "w": 1440,
+        "h": 900
+       },
+       "exception": "inline"
+      },
+      {
+       "sig": "a.inline-flex.min-h-[40px]",
+       "tag": "a",
+       "w": 97,
+       "h": 40,
+       "sample": "All 13 cards",
+       "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "isMobile": false,
+        "w": 1440,
+        "h": 900
+       }
+      },
+      {
+       "sig": "a.inline-flex.min-h-[40px]",
+       "tag": "a",
+       "w": 179,
+       "h": 40,
+       "sample": "CenseCard Picker",
+       "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "isMobile": false,
+        "w": 1440,
+        "h": 900
+       }
+      }
+     ],
+     "undersizedCount": 0,
+     "belowComfortCount": 4,
+     "spacingExceptionChecked": true,
+     "spacingExceptionSkipReason": null,
+     "targetCount": 6,
+     "missingAltCount": 0,
+     "missingAlt": [],
+     "headingJumpCount": 0,
+     "headingJumps": [],
+     "h1Count": 1,
+     "missingLandmarks": []
+    }
+   },
+   "notAutoDetectable": [
+    "Spatial coherence — whether elements enter/exit from where they logically belong (a menu growing from its anchor, a sheet rising from the edge it docks to). The audit sees durations and easings, not spatial origin.",
+    "Clean fades — whether opacity transitions are free of mid-fade color shifts, banding, or double-compositing. Only a human eye (or pixel diff) can judge fade quality.",
+    "Jump cuts — abrupt state changes with no transition where one is expected (content swaps, route changes). Absence of animation is not itself in the DOM.",
+    "Unified direction — whether a group of elements animates along a consistent axis/choreography rather than each doing its own thing.",
+    "Perceived hierarchy / emphasis — whether motion draws the eye to the right thing at the right time.",
+    "Content-appropriate personality — expressive vs. standard scheme being the right call for the brand and context.",
+    "Interruptibility & continuity — whether in-flight animations respond gracefully to new input rather than snapping.",
+    "Real contrast under imagery/gradients — text over photos or gradient backgrounds (the audit samples solid computed backgrounds only).",
+    "Closed shadow roots — their internals are structurally unreachable from script and are not scanned."
+   ],
+   "meta": {
+    "url": "http://localhost:3204/",
+    "title": "Card Picker by Cense: your first credit card, in dollars",
+    "timestamp": "2026-11-15T18:15:18.185Z",
+    "contentFingerprint": "46wslp",
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+    "viewport": {
+     "width": 1440,
+     "height": 900,
+     "dpr": 1,
+     "isMobile": false,
+     "w": 1440,
+     "h": 900
+    },
+    "siteType": "saas",
+    "elementsScanned": 33,
+    "elementsTotal": 40,
+    "sampleCap": 1500,
+    "sampleCapped": false,
+    "sheetsSkipped": 0,
+    "openShadowRoots": 1,
+    "notes": [
+     "1 open shadow root(s) traversed. Closed shadow roots (if any) cannot be scanned."
+    ],
+    "durationMs": 6.7
+   }
+  },
+  "probes": {
+   "animationsAtLoad": {
+    "count": 2,
+    "running": 0,
+    "anims": [
+     {
+      "target": "div.rise",
+      "name": "rise",
+      "dur": 240,
+      "infinite": false,
+      "state": "finished"
+     },
+     {
+      "target": "div.rise.mt-8",
+      "name": "rise",
+      "dur": 240,
+      "infinite": false,
+      "state": "finished"
+     }
+    ]
+   },
+   "animationsAfterScroll": {
+    "count": 2,
+    "running": 0,
+    "anims": [
+     {
+      "target": "div.rise",
+      "name": "rise",
+      "dur": 240,
+      "infinite": false,
+      "state": "finished"
+     },
+     {
+      "target": "div.rise.mt-8",
+      "name": "rise",
+      "dur": 240,
+      "infinite": false,
+      "state": "finished"
+     }
+    ]
+   },
+   "hoverProbe": [
+    {
+     "label": "CenseCard Picker",
+     "selector": "a.inline-flex",
+     "changes": false
+    },
+    {
+     "label": "All 13 cards",
+     "selector": "a.inline-flex",
+     "changes": true
+    },
+    {
+     "label": "Find my card",
+     "selector": "button.inline-flex",
+     "changes": true
+    },
+    {
+     "label": "See an example result first",
+     "selector": "a.inline-flex",
+     "changes": true
+    },
+    {
+     "label": "See all 13 cards we compare",
+     "selector": "a.font-semibold",
+     "changes": false
+    },
+    {
+     "label": "Cense",
+     "selector": "a.font-semibold",
+     "changes": false
+    }
+   ],
+   "reducedMotion": {
+    "emulated": true,
+    "snapshot": {
+     "count": 2,
+     "running": 0,
+     "anims": [
+      {
+       "target": "div.rise",
+       "name": "rise",
+       "dur": 0,
+       "infinite": false,
+       "state": "finished"
+      },
+      {
+       "target": "div.rise.mt-8",
+       "name": "rise",
+       "dur": 0,
+       "infinite": false,
+       "state": "finished"
+      }
+     ]
+    },
+    "ungatedCount": 0
+   }
+  },
+  "durationMs": 2234
+ },
+ "extras": [
+  {
+   "id": "95e2194c-5149-444f-928f-c22a2d0d063e",
+   "severity": "P3",
+   "category": "Accessibility",
+   "device": "desktop",
+   "title": "Primary controls show no hover feedback",
+   "description": "3 of 6 sampled primary controls showed no visual change on hover (CenseCard Picker, See all 13 cards we compare, Cense).",
+   "recommendation": "Add :hover feedback (background, color, or elevation change) to interactive elements.",
+   "source": "engine",
+   "scope": "page",
+   "renderContext": "dom",
+   "observedOn": 1,
+   "sampleSize": 1,
+   "viewport": {
+    "width": 1440,
+    "height": 900,
+    "dpr": 1,
+    "isMobile": false
+   },
+   "themeId": "eng:hover-no-feedback",
+   "evidence": {
+    "measured": "3/6 unresponsive",
+    "contributors": [
+     {
+      "selector": "a.inline-flex",
+      "value": "CenseCard Picker"
+     },
+     {
+      "selector": "a.font-semibold",
+      "value": "See all 13 cards we compare"
+     },
+     {
+      "selector": "a.font-semibold",
+      "value": "Cense"
+     }
+    ]
+   }
+  }
+ ]
+}
