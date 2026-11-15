@@ -9,6 +9,13 @@ const QUARTER_WORD: Partial<Record<SpendingCategory, string>> = {
   online_shopping: 'Amazon',
 };
 
+// The travel priority ranks Chase cards up for their points, but a Freedom
+// card cannot send points to airlines or hotels itself. Chase's rewards
+// agreement lets points move to another Chase card you hold, and its Sapphire
+// Preferred page (annual fee $95) is where partner transfers are offered.
+export const CHASE_SAPPHIRE_NOTE =
+  'Moving them to airlines and hotels needs a Sapphire card later on, which has an annual fee ($95 for Sapphire Preferred).';
+
 const COUNT = ['no', 'one', 'two', 'three', 'four'];
 
 export function generateWhyBullets(calc: CardCalculation, answers: QuizAnswers): string[] {
@@ -29,7 +36,7 @@ export function generateWhyBullets(calc: CardCalculation, answers: QuizAnswers):
   if (card.transferablePoints && answers.priority === 'travel_rewards') {
     if (card.issuer === 'Chase') {
       bullets.push(
-        'Earns Chase Ultimate Rewards points, which transfer to airlines and hotels once you add a Sapphire card'
+        `Earns Chase points that count toward travel. ${CHASE_SAPPHIRE_NOTE}`
       );
     } else if (card.issuer === 'Capital One') {
       bullets.push(

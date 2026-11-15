@@ -4,6 +4,7 @@ import { RecommendationResult } from '@/types';
 import { formatDollars, spendBucketMonthlyMidpoint } from '@/lib/utils';
 import { TERMS_CHECKED_LABEL } from '@/data/cards';
 import { Disclosure } from '@/components/shared/ui';
+import { CHASE_SAPPHIRE_NOTE } from '@/lib/copy-generator';
 
 interface Props {
   result: RecommendationResult;
@@ -54,6 +55,14 @@ export function Methodology({ result }: Props) {
       'A welcome bonus only counts if your spending would reach its requirement in time. Discover matches everything you earn in the first 12 months, so its match equals a full year of rewards. Bank of America pays an extra 3% in the category you choose for one year, so that is counted as first-year money too.',
     ],
     ['Miles', 'Counted at 1 cent each, which is on the low side for most redemptions.'],
+    ...(quizAnswers.priority === 'travel_rewards'
+      ? ([
+          [
+            'Your travel priority',
+            `Cards with no fee abroad move up the list, and cards whose points can go to airlines and hotels move up most. That lift changes the order only, not the dollars shown. For Chase points it is a later step: ${CHASE_SAPPHIRE_NOTE}`,
+          ],
+        ] as [string, string][])
+      : []),
     [
       'Spending abroad',
       quizAnswers.travelIntent === 'yes'

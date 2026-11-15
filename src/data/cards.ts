@@ -156,7 +156,7 @@ export const CARDS: CreditCard[] = [
     applyUrl: 'https://creditcards.chase.com/cash-back-credit-cards/freedom/unlimited',
     transferablePoints: true,
     universeReasoning:
-      'One of the most consistently recommended no-annual-fee cards. Earns Chase Ultimate Rewards cash back with a strong $200 welcome bonus on a modest $500 spend. The 3% dining rate is a standout for students who eat out frequently. Points transfer to Chase Sapphire when you upgrade later.',
+      'One of the most consistently recommended no-annual-fee cards. Earns Chase Ultimate Rewards cash back with a strong $200 welcome bonus on a modest $500 spend. The 3% dining rate is a standout for students who eat out frequently. Moving the points to airlines and hotels needs a Sapphire card later on, which has an annual fee ($95 for Sapphire Preferred).',
     filterTags: ['cash_back', 'travel'],
   },
   {
@@ -187,7 +187,7 @@ export const CARDS: CreditCard[] = [
     applyUrl: 'https://creditcards.chase.com/cash-back-credit-cards/freedom/flex',
     transferablePoints: true,
     universeReasoning:
-      '5% on categories that change each quarter, plus 3% on dining all year. In 2026 the 5% went to dining twice, and Amazon, gas and groceries once each. No foreign transaction fee. Best for students willing to switch on the categories every quarter.',
+      '5% on categories that change each quarter, plus 3% on dining all year. In 2026 the 5% went to dining twice, and Amazon, gas and groceries once each. No foreign transaction fee. Best for students willing to switch on the categories every quarter. Moving the points to airlines and hotels needs a Sapphire card later on, which has an annual fee.',
     filterTags: ['cash_back', 'travel'],
   },
   {
