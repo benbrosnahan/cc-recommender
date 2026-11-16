@@ -88,3 +88,15 @@ Direction: Loan Desk's quiet cream-and-green ledger applied to a card comparison
 - Bank of America's pages (MONEY-18) and the kit's interactive steps (DX-01).
 - Security headers over HTTPS, until a deploy.
 - The CSP blocks the Vercel toolbar on deployments.
+
+## Follow-ups, 2026-11-15 (deployed the same day)
+
+| ID | Was | Now | Source |
+|---|---|---|---|
+| SEO-02 | Canonical set to cense.vercel.app; domain choice was Ben's | Fixed: Ben chose https://cense-card-recommender.vercel.app. The canonical link, og:url, sitemap, robots.txt Sitemap line and the WebApplication JSON-LD all use it (`src/lib/site.ts`). cense.vercel.app still serves the same build but is never named. Confirmed live. Test: `seo.spec.mjs` SEO-02 | Ben, 2026-11-15 |
+| DX-02 | README named cense-card-recommender.vercel.app | Fixed: the README names it as the canonical address and says cense.vercel.app also serves the build | Ben |
+| MONEY-10 | "Rather not say" treated as 670 to 739 | Kept, Ben's decision | Ben |
+| MONEY-11 | Travel priority adds $200 of ranking value for Chase points that only transfer with a Sapphire card | Fixed: the boost stays, and the page says so wherever it shows (the Chase "why it fits" bullet under the travel priority, a "Your travel priority" row in "How these numbers are worked out", and the /cards text for Freedom Flex and Freedom Unlimited): moving the points to airlines and hotels needs a Sapphire card later on, which has an annual fee ($95 for Sapphire Preferred). Tests: three MONEY-11 tests in `money.spec.mjs` | Chase Freedom Unlimited Rewards Program Agreement (asset.chase.com/content/dam/card/rulesregulations/en/RPA0509_Web.pdf); creditcards.chase.com/rewards-credit-cards/sapphire/preferred |
+| MONEY-18 | BofA foreign fee unconfirmed (BofA blocks automated reads) | Fixed: Ben confirmed in a normal browser that Customized Cash Rewards and BankAmericard (student versions) charge 3%. Both carry `foreignTransactionFee: 0.03` with the source note "confirmed on bankofamerica.com by Ben, 2026-11-15". Test: MONEY-18 | bankofamerica.com, checked by Ben 2026-11-15 |
+
+Playwright: 83 pass locally and on the production build (A11Y-01 and SEO-04 remain known issues).
