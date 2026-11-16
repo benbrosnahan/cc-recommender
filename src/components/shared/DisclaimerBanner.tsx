@@ -19,7 +19,7 @@ export function DisclaimerBanner() {
           >
             Cense
           </a>
-          , a free weekly personal finance newsletter for people who did not get taught this.
+          , a free weekly personal finance newsletter for people who had to learn this alone.
         </p>
       </div>
     </footer>
